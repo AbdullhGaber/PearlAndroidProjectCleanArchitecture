@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1020858223429",
+    "firebase_url": "https://skincaredb-eb7c5-default-rtdb.firebaseio.com",
+    "project_id": "skincaredb-eb7c5",
+    "storage_bucket": "skincaredb-eb7c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020858223429:android:e0c738c4d60a97da1d4c2c",
+        "android_client_info": {
+          "package_name": "com.example.pearl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUQIGG_58Bc43_dC_ZUeb-dgdcK5_shOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

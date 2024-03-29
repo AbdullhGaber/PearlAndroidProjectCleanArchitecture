@@ -14,21 +14,26 @@ data class Page(
 val pages = listOf(
     Page(
         personImage = R.drawable.onboarding_picture_1,
-        title = "Analise your skin and know its type",
-        text = "Lorem ipsum dolor sit amet consectetur. Vestibulum nam sed platea bibendum libero tempor faucibus."
+        title = "Unlock Your Skin's Secrets",
+        text = "Explore your skin with our easy skin scan. Find out your skin type and get personalized tips."
+    ),
+
+    Page(
+        personImage = R.drawable.onboarding_picture_4,
+        title = "Customized Care, Just for You",
+        text = "Discover personalized product suggestions and tips crafted for your unique skin. Elevate your skincare journey with individualized care."
     ),
 
     Page(
         personImage = R.drawable.onboarding_picture_2,
-        sunMoonImage = R.drawable.sun,
         title = "Get your morning skin routine",
-        text = "Lorem ipsum dolor sit amet consectetur. Vestibulum nam sed platea bibendum libero tempor faucibus."
+        text = "Start your day with a refreshing morning routine designed to nourish and revitalize your skin. Embrace the glow and set the tone for a beautiful day ahead"
     ),
 
     Page(
         personImage = R.drawable.onboarding_picture_3,
         sunMoonImage = R.drawable.moon,
         title = "And your night skin routine",
-        text = "Lorem ipsum dolor sit amet consectetur. Vestibulum nam sed platea bibendum libero tempor faucibus."
+        text = "Nourish your skin with a simple night routine. Let it restore and refresh while you sleep, so you wake up to a rejuvenated and glowing complexion."
     ),
 )

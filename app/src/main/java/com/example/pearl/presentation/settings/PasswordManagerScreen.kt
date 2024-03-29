@@ -17,11 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
-import com.example.pearl.presentation.common.PasswordTextField
+import com.example.pearl.presentation.authentication.AuthEvent
+import com.example.pearl.presentation.authentication.AuthState
+import com.example.pearl.presentation.authentication.components.PasswordTextField
 import com.example.pearl.presentation.common.PrimaryButton
 
 @Composable
-fun PasswordManagerScreen(){
+fun PasswordManagerScreen(
+    authState : AuthState,
+    authEvent: (AuthEvent) -> Unit
+){
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -57,7 +62,9 @@ fun PasswordManagerScreen(){
             PasswordTextField(
                 enabled = false,
                 text = "abc123123",
-                label = ""
+                label = "",
+                authState = authState,
+                authEvent = authEvent
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -77,7 +84,9 @@ fun PasswordManagerScreen(){
             Spacer(modifier = Modifier.height(8.dp))
 
             PasswordTextField(
-                label = ""
+                label = "",
+                authState = authState,
+                authEvent = authEvent
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -87,7 +96,9 @@ fun PasswordManagerScreen(){
             Spacer(modifier = Modifier.height(8.dp))
 
             PasswordTextField(
-                label = ""
+                label = "",
+                authState = authState,
+                authEvent = authEvent
             )
         }
         
@@ -106,5 +117,5 @@ fun PasswordManagerScreen(){
 @Composable
 @Preview
 fun PreviewPasswordManager(){
-    PasswordManagerScreen()
+//    PasswordManagerScreen()
 }

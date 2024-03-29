@@ -14,10 +14,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun IntroductionButton(
     modifier: Modifier = Modifier,
-    text : String
+    text : String,
+    onClick : () -> Unit
 ){
     Button(
-        onClick = { /* Navigate to on-boarding screen */ },
+        onClick = onClick,
         modifier = modifier
             .size(150.dp, 60.dp)
             .padding(bottom = 16.dp),

@@ -10,10 +10,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pearl.R
-import com.example.pearl.presentation.introduction.components.IntroductionButtonsFadeInAnimation
+import com.example.pearl.presentation.introduction.components.FadeInAnimation
 @Composable
 fun IntroductionScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToOnBoardingScreen : () -> Unit
 ){
     Box(modifier = Modifier.fillMaxSize() ){
         Image(
@@ -35,21 +36,19 @@ fun IntroductionScreen(
            modifier = modifier.padding(vertical = 196.dp)
        )
 
-       Column(
-           modifier = Modifier.fillMaxSize(),
-           horizontalAlignment = Alignment.CenterHorizontally
-       ) {
-
-
-           IntroductionButtonsFadeInAnimation()
-       }
-
+       FadeInAnimation(
+           content = {
+               IntroductionButton(
+                   text = "Get Started",
+                   onClick = navigateToOnBoardingScreen
+               )
+           }
+       )
    }
-
 }
 
 @Preview
 @Composable
 fun IntroScreenPreview(){
-    IntroductionScreen()
+//    IntroductionScreen()
 }

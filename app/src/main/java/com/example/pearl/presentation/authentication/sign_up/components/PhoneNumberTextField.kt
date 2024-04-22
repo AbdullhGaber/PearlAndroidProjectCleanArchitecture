@@ -1,10 +1,10 @@
 package com.example.pearl.presentation.authentication.sign_up.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +14,10 @@ import com.example.pearl.presentation.authentication.AuthState
 import com.simon.xmaterialccp.component.MaterialCountryCodePicker
 import com.simon.xmaterialccp.data.ccpDefaultColors
 import com.simon.xmaterialccp.data.utils.getDefaultLangCode
+import com.simon.xmaterialccp.data.utils.getDefaultPhoneCode
 import com.simon.xmaterialccp.data.utils.getLibCountries
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun PhoneNumberTextField(
@@ -22,23 +25,35 @@ fun PhoneNumberTextField(
     authEvent: (AuthEvent) -> Unit
 ) {
 
-    val context = LocalContext.current
-    val defaultLang by rememberSaveable{ mutableStateOf(getDefaultLangCode(context)) }
-
     Column(
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth()
     ) {
-
         MaterialCountryCodePicker(
             pickedCountry = {
-               authEvent(AuthEvent.UpdatePhoneCodeDefaultLang(it))
+//                authEvent(AuthEvent.UpdatePhoneCodeAndDefaultLang(it))
+
+                authEvent(AuthEvent.UpdatePhoneDefaultLang(it.countryCode))
+
+                authEvent(AuthEvent.UpdatePhoneCode(it.countryPhoneCode))
+
+                Log.e("phone TAG" , "country code selected is ${it.countryCode}" )
+                Log.e("phone TAG" , "country phone code selected is ${it.countryPhoneCode}" )
+
+                runBlocking {
+                    delay(2000)
+                    Log.e("phone TAG" , "country code selected from state is ${authState.defaultLang}" )
+                    Log.e("phone TAG" , "country phone code selected from state is ${authState.phoneCode}" )
+                }
             },
-            defaultCountry = getLibCountries().single { it.countryCode == defaultLang  },
+            defaultCountry = getLibCountries().single { it.countryCode == authState.defaultLang },
             error = !authState.isValidPhone,
             text = authState.phoneNo,
-            onValueChange = { authEvent(AuthEvent.UpdatePhoneNumber(it)) },
+            onValueChange = {
+                authEvent(AuthEvent.UpdatePhoneNumber(it))
+                authEvent(AuthEvent.UpdatePhoneValidity)
+            },
             searchFieldPlaceHolderTextStyle = MaterialTheme.typography.bodyMedium,
             searchFieldTextStyle = MaterialTheme.typography.bodyMedium,
             phonenumbertextstyle =  MaterialTheme.typography.bodyMedium,

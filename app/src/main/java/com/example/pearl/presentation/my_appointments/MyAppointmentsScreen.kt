@@ -107,7 +107,7 @@ fun MyAppointmentsScreen(){
             Spacer(Modifier.height(16.dp))
 
             val tabItems = listOf("Upcoming" , "Completed" , "Cancelled")
-            var selectedIndex by remember{ mutableStateOf(0) }
+            var selectedIndex by remember{ mutableIntStateOf(0) }
 
             TabRow(selectedTabIndex = selectedIndex) {
                 tabItems.forEachIndexed{ index: Int, item: String ->

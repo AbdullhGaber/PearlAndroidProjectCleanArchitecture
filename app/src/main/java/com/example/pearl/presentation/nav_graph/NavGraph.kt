@@ -11,6 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.pearl.presentation.authentication.AuthViewModel
+import com.example.pearl.presentation.authentication.otp.OTPScreen
+import com.example.pearl.presentation.authentication.otp.OTPScreenType
+import com.example.pearl.presentation.authentication.otp.otpInfoMap
 import com.example.pearl.presentation.authentication.sign_in.SignInScreen
 import com.example.pearl.presentation.authentication.sign_up.SignUpScreen
 import com.example.pearl.presentation.home.HomeScreen
@@ -28,8 +31,6 @@ fun NavGraph(
     val state by authViewModel.mAuthFlowState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController , startDestination = startDestination){
-
-
         navigation(
             route = Route.AppStartNavigation.route,
             startDestination = Route.IntroductionScreen.route
@@ -66,6 +67,9 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent,
                     navigateToSignIn = {
                         navigateToTab(navController = navController , Route.SignInScreen.route)
+                    },
+                    navigateToOTPScreen = {
+                        navigateToTab(navController = navController , Route.OTPScreen.route)
                     }
                 )
             }
@@ -79,6 +83,19 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent,
                     navigateToSignUp = {
                         navigateToTab(navController = navController , Route.SignUpScreen.route)
+                    }
+                )
+            }
+
+            composable(
+                route = Route.OTPScreen.route
+            ){
+                OTPScreen(
+                    otpInfo = otpInfoMap[OTPScreenType.Verification]!!,
+                    authEvent = authViewModel::onEvent ,
+                    authState = authViewModel.mAuthState.value,
+                    navigateToQuizScreen = {
+                        navigateToTab(navController = navController , Route.QuizScreen.route)
                     }
                 )
             }

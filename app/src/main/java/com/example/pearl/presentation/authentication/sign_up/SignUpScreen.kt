@@ -38,10 +38,9 @@ fun SignUpScreen(
     authState: AuthState,
     authFlowState: AuthFlowState,
     authEvent: (AuthEvent) -> Unit,
-    navigateToSignIn : () -> Unit
+    navigateToSignIn : () -> Unit,
+    navigateToOTPScreen : () -> Unit,
 ){
-
-
     Box(modifier = Modifier.fillMaxSize() ){
         Image(
             painter = painterResource(id = R.drawable.sign_in) ,
@@ -104,14 +103,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
         PrimaryButton(text = "Sign Up" , onClick = {
-            authEvent(
-                AuthEvent.SignUp(
-                    authState.email ,
-                    authState.firstName ,
-                    authState.lastName ,
-                    authState.password
-                )
-            )
+            navigateToOTPScreen()
         })
 
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))

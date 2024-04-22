@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:name=".Pearl"
         android:allowBackup="true"
@@ -28,6 +34,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
+
     </application>
 
 </manifest>

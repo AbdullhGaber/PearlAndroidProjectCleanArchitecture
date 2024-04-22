@@ -1,7 +1,5 @@
 package com.example.pearl.presentation.authentication
 
-import androidx.compose.ui.text.input.TextFieldValue
-
 data class AuthState(
     val email : String = "",
     val firstName : String = "",
@@ -9,8 +7,10 @@ data class AuthState(
     val password : String = "",
     val passwordVisibility : Boolean = false,
     val phoneNo : String = "",
-    val isValidPhone : Boolean = false,
-    val phoneCode : String = "",
-    val defaultLang : String = "",
-    val otpTextList : List<TextFieldValue> = emptyList()
+    val isValidPhone : Boolean = true,
+    val phoneCode : String = "+1",
+    val defaultLang : String = "us",
+    val otpCode :String = "",
+    val generatedOTPCode : String = "",
+    val shouldStartSMSRetrieval : Boolean = false
 )

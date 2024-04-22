@@ -1,5 +1,6 @@
 package com.example.pearl.presentation.authentication.otp
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -19,14 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens
 import com.example.pearl.R
+import com.example.pearl.presentation.authentication.AuthEvent
+import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
-import com.example.pearl.presentation.authentication.components.OTPTextFields
+import com.example.pearl.presentation.authentication.components.OTPTextField
 
 @Composable
 fun OTPScreen(
-
-    otpInfo: OTPInfo
+    otpInfo: OTPInfo,
+    authEvent : (AuthEvent) -> Unit,
+    authState: AuthState,
+    navigateToQuizScreen : () -> Unit
 ){
     Box(modifier = Modifier.fillMaxSize()){
 
@@ -62,8 +68,9 @@ fun OTPScreen(
                 textAlign = TextAlign.Center
             )
 
-
-            OTPTextFields()
+            OTPTextField(otpSize = 5 , onFilled = {
+                authEvent(AuthEvent.SaveOTPCode(it))
+            })
 
             Column(
                 modifier = Modifier
@@ -122,14 +129,21 @@ fun OTPScreen(
 
             Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
-            PrimaryButton(text = "Send" , onClick = {})
-        }
+            val context = LocalContext.current
 
+            PrimaryButton(text = "Send Me OTP Code" , onClick = {
+                authEvent(AuthEvent.SendOTPMessage(context))
+            })
+
+            PrimaryButton(text = "Verify" , onClick = {
+                authEvent(AuthEvent.VerifyOTPCode(navigateToQuizScreen))
+            })
+        }
     }
 }
 
 @Preview
 @Composable
 fun OTPPreview(){
-    OTPScreen(otpInfo = otpInfoMap[OTPScreenType.PasswordEmail]!!)
+//    OTPScreen(otpInfo = otpInfoMap[OTPScreenType.PasswordEmail]!!)
 }

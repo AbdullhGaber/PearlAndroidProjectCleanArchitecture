@@ -3,6 +3,7 @@ package com.example.pearl.presentation.favorites
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -23,18 +24,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.newsapp.presentation.Dimens
 import com.example.pearl.R
 import com.example.pearl.presentation.common.FeaturedProductCard
 import com.example.pearl.presentation.dermatologists.components.DermatologistCard
 import com.example.pearl.presentation.dermatologists.favoriteDermatologistsCardData
 import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 import com.example.pearl.presentation.products.featuredProducts
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FavoritesScreen(){
+fun FavoritesScreen(
+    navigateToPreviousTab : () -> Unit,
+    navigateToScreen : (String) -> Unit
+){
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -49,7 +58,11 @@ fun FavoritesScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable{
+                            navigateToPreviousTab()
+                        },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -101,8 +114,14 @@ fun FavoritesScreen(){
                             state = state,
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             content = {
-                                items(featuredProducts.filter{it.isFavorite}.size) {
-                                    FeaturedProductCard(featuredProduct = featuredProducts.filter{it.isFavorite}[it])
+                                val favoriteProducts = featuredProducts.filter{it.isFavorite}
+                                items(favoriteProducts.size) {
+                                    FeaturedProductCard(
+                                        featuredProduct = favoriteProducts[it],
+                                        onCardClick = {
+                                            navigateToScreen(favoriteProducts[it].name)
+                                        }
+                                    )
                                 }
                             }
                         )
@@ -142,5 +161,5 @@ fun FavoritesScreen(){
 @Composable
 @Preview
 fun PreviewFavoriteScreen(){
-    FavoritesScreen()
+//    FavoritesScreen()
 }

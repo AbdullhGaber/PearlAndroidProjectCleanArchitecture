@@ -2,6 +2,7 @@ package com.example.pearl.presentation.skin_progress
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,14 +18,21 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.newsapp.presentation.Dimens.MediumPadding2
 import com.example.pearl.R
 import com.example.pearl.presentation.common.BigCircleButton
 import com.example.pearl.presentation.common.SkinCalenderView
+import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
+import com.example.pearl.presentation.pearl_navigator.PearlNavState
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @Composable
-fun SkinProgressScreen(){
+fun SkinProgressScreen(
+    navigateToPreviousTab : () -> Unit
+){
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)) {
@@ -40,7 +48,9 @@ fun SkinProgressScreen(){
                     Image(
                         painter = painterResource(id = R.drawable.arrow_back),
                         contentDescription = null,
-                        modifier = Modifier.padding(5.dp)
+                        modifier = Modifier.padding(5.dp).clickable {
+                            navigateToPreviousTab()
+                        }
                     )
 
                     Text(
@@ -125,5 +135,5 @@ fun SkinProgressScreen(){
 @Composable
 @Preview
 fun PreviewSkinProgressScreen(){
-    SkinProgressScreen()
+//    SkinProgressScreen()
 }

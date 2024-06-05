@@ -2,8 +2,11 @@ package com.example.pearl.presentation.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,11 +23,16 @@ import com.example.pearl.R
 import com.example.pearl.presentation.common.PrimaryButton
 
 @Composable
-fun DeleteAccountScreen(){
+fun DeleteAccountScreen(
+    navigateToPrevious : () -> Unit
+){
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .background(Color.White)
             .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Box(
@@ -35,7 +43,11 @@ fun DeleteAccountScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable {
+                            navigateToPrevious()
+                        },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -170,5 +182,5 @@ fun DeleteAccountScreen(){
 @Composable
 @Preview
 fun PreviewDeleteAccountScreen(){
-    DeleteAccountScreen()
+    DeleteAccountScreen({})
 }

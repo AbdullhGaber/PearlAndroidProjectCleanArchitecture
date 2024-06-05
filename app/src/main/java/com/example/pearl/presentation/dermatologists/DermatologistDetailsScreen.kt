@@ -2,6 +2,7 @@ package com.example.pearl.presentation.dermatologists
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -25,9 +26,15 @@ import com.example.pearl.presentation.common.HorizontalLine
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.dermatologists.components.ReviewComment
 import com.example.pearl.presentation.dermatologists.components.ReviewTextField
+import com.example.pearl.presentation.home.Doctor
+import com.example.pearl.presentation.home.doctors
 
 @Composable
-fun DermatologistDetailsScreen() {
+fun DermatologistDetailsScreen(
+    doctor : Doctor,
+    navigateToPrevious : () -> Unit,
+    navigateToScreen : () -> Unit
+){
     val scrollState = rememberScrollState()
 
     Box(
@@ -48,7 +55,11 @@ fun DermatologistDetailsScreen() {
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier.
+                    align(Alignment.TopStart).
+                    clickable {
+                          navigateToPrevious()
+                    },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -82,7 +93,7 @@ fun DermatologistDetailsScreen() {
                     .background(Color(0xFFFAF8FF))
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.doctor_1),
+                        painter = painterResource(id = doctor.image),
                         contentDescription = null,
                         modifier = Modifier
                             .size(90.dp, 110.dp)
@@ -95,7 +106,7 @@ fun DermatologistDetailsScreen() {
 
                 Column{
                     Text(
-                        text = "Dr. Mariam Zahran",
+                        text = doctor.name,
                         fontSize = 18.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFF000000),
@@ -111,7 +122,7 @@ fun DermatologistDetailsScreen() {
                         Spacer(modifier = Modifier.width(3.dp))
 
                         Text(
-                            text = "El Mansoura, El Gaish St",
+                            text = doctor.location,
                             fontSize = 12.sp,
                             fontWeight = FontWeight(400),
                             color = Color(0xFF7F7F7F),
@@ -173,7 +184,7 @@ fun DermatologistDetailsScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Dr. Mariam, an accomplished dermatologist in El Mansoura with seven years of specialized experience, excels in diagnosing",
+                text = doctor.description,
                 fontSize = 14.sp,
                 fontWeight = FontWeight(400),
                 color = Color(0xFF7F7F7F)
@@ -301,10 +312,13 @@ fun DermatologistDetailsScreen() {
 
             ReviewComment()
             
-            PrimaryButton(text = "Book Appointment", onClick = { /*TODO*/ } , modifier = Modifier
-                .fillMaxWidth()
-                .align(CenterHorizontally))
-
+            PrimaryButton(
+                text = "Book Appointment",
+                onClick = { navigateToScreen() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(CenterHorizontally)
+            )
         }
     }
 }
@@ -312,5 +326,5 @@ fun DermatologistDetailsScreen() {
 @Composable
 @Preview
 fun PreviewDermatologistDetailsScreen(){
-    DermatologistDetailsScreen()
+    DermatologistDetailsScreen(doctors[0] , {} , {})
 }

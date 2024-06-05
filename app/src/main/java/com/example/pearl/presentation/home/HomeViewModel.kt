@@ -10,5 +10,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
+    val mHomeScreenState = mutableStateOf(HomeScreenState())
+    fun onEvent(event : HomeScreenEvents){
+        when(event){
+            is HomeScreenEvents.NavigateToScreen -> {
 
+            }
+        }
+    }
 }

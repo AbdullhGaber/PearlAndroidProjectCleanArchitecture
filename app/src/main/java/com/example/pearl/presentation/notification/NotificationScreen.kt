@@ -3,6 +3,7 @@ package com.example.pearl.presentation.notification
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
@@ -30,7 +31,9 @@ import com.example.pearl.presentation.notification.components.NotificationCard
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NotificationScreen(){
+fun NotificationScreen(
+    navigateToPrevious : () -> Unit
+){
     Box(Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -43,7 +46,11 @@ fun NotificationScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier.
+                    align(Alignment.TopStart).
+                    clickable {
+                        navigateToPrevious()
+                    },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -126,5 +133,5 @@ fun NotificationScreen(){
 @Composable
 @Preview
 fun PreviewNotificationScreen(){
-    NotificationScreen()
+//    NotificationScreen()
 }

@@ -11,13 +11,16 @@ import com.example.pearl.R
 
 @Composable
 fun CloseIconButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick : () -> Unit = {}
 ){
     Icon(
         painter = painterResource(id = R.drawable.ic_close),
         contentDescription = null,
         modifier = modifier.
         padding(start = Dimens.MediumPadding1).
-        clickable {  }
+        clickable {
+            onClick()
+        }
     )
 }

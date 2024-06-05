@@ -25,11 +25,14 @@ import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
 import com.example.pearl.presentation.authentication.sign_up.components.PhoneNumberTextField
+import com.example.pearl.presentation.nav_graph.Route
 
 @Composable
 fun ForgotPasswordByPhoneNumberScreen(
     authState : AuthState,
-    authEvent : (AuthEvent) -> Unit
+    authEvent : (AuthEvent) -> Unit,
+    navigateToScreen : (String) -> Unit,
+    navigateUp : () -> Unit
 ){
 
     Box(modifier = Modifier.fillMaxSize() ){
@@ -46,7 +49,12 @@ fun ForgotPasswordByPhoneNumberScreen(
             .padding(top = Dimens.MediumPadding2),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        CloseIconButton(modifier = Modifier.align(Start))
+        CloseIconButton(
+            modifier = Modifier.align(Start),
+            onClick = {
+                navigateUp()
+            }
+        )
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
@@ -108,7 +116,7 @@ fun ForgotPasswordByPhoneNumberScreen(
                 text = forgotPasswordAnnotatedString,
                 modifier = Modifier
                     .clickable {
-
+                        navigateToScreen(Route.ForgotPasswordByEmailScreen.route)
                     }
                     .padding(end = MediumPadding1),
 

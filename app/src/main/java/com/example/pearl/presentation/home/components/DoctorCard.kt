@@ -2,6 +2,7 @@ package com.example.pearl.presentation.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -23,7 +24,8 @@ import com.example.pearl.presentation.home.doctors
 
 @Composable
 fun DoctorCard(
-    doctor : Doctor
+    doctor : Doctor,
+    onCardClick : () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -31,6 +33,9 @@ fun DoctorCard(
             .background(color = Color.White)
             .wrapContentSize()
             .padding(5.dp)
+            .clickable {
+                onCardClick()
+            }
     ){
         Column(
             modifier = Modifier.padding(ExtraSmallPadding2),
@@ -95,5 +100,5 @@ fun DoctorCard(
 @Composable
 @Preview
 fun DoctorCardPreview(){
-    DoctorCard(doctors[0])
+    DoctorCard(doctors[0] , {})
 }

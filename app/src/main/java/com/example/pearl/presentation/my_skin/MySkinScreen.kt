@@ -2,6 +2,7 @@ package com.example.pearl.presentation.my_skin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,11 +15,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pearl.R
 import com.example.pearl.presentation.my_skin.components.MySkinBox
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @Composable
-fun MySkinScreen(){
+fun MySkinScreen(
+     navigateToPreviousTab : () -> Unit
+){
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -32,7 +39,11 @@ fun MySkinScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable {
+                           navigateToPreviousTab()
+                        },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -60,5 +71,5 @@ fun MySkinScreen(){
 @Composable
 @Preview
 fun PreviewMySkinScreen(){
-    MySkinScreen()
+//    MySkinScreen()
 }

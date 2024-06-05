@@ -25,7 +25,8 @@ import com.example.pearl.presentation.common.HomeButton
 
 @Composable
 fun NutritionRoutineBox(
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
+    onButtonClick : () -> (Unit)
 ){
     Box(
         modifier = modifier
@@ -67,8 +68,10 @@ fun NutritionRoutineBox(
 
                     Spacer(modifier = Modifier.height(ExtraSmallPadding))
 
-                    HomeButton(text = "Explore", onClick = { /*TODO*/ } , modifier = Modifier.align(End))
-
+                    HomeButton(
+                        text = "Explore",
+                        onClick = { onButtonClick() },
+                        modifier = Modifier.align(End))
                 }
             }
         }
@@ -78,5 +81,5 @@ fun NutritionRoutineBox(
 @Composable
 @Preview
 fun NutritionRoutineBoxPreview(){
-    NutritionRoutineBox()
+//    NutritionRoutineBox()
 }

@@ -22,7 +22,9 @@ import com.example.pearl.R
 import com.example.pearl.presentation.common.PrimaryTextField
 
 @Composable
-fun ProfileScreen(){
+fun ProfileScreen(
+    navigateToPrevious : () -> Unit
+){
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier
@@ -38,12 +40,12 @@ fun ProfileScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier.align(Alignment.TopStart).clickable { navigateToPrevious() },
                     contentScale = ContentScale.FillBounds
                 )
 
                 Text(
-                    text = "My Appointment",
+                    text = "Profile",
                     fontSize = 18.sp,
                     fontWeight = FontWeight(600),
                     color = Color(0xFF000000),
@@ -164,11 +166,10 @@ fun ProfileScreen(){
             }
         }
     }
-
 }
 
 @Composable
 @Preview
 fun PreviewProfileScreen(){
-    ProfileScreen()
+    ProfileScreen({})
 }

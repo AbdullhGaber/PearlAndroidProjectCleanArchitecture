@@ -2,6 +2,7 @@ package com.example.pearl.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -27,7 +28,8 @@ import com.example.pearl.presentation.home.recommendedProducts
 
 @Composable
 fun RecommendedProductCard(
-    recommendedProduct: RecommendedProduct
+    recommendedProduct: RecommendedProduct,
+    onCardClick : () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -35,6 +37,9 @@ fun RecommendedProductCard(
             .background(color = Color.White)
             .wrapContentSize()
             .padding(5.dp)
+            .clickable {
+                onCardClick()
+            }
     ){
         Column(
             Modifier.padding(5.dp),
@@ -87,5 +92,5 @@ fun RecommendedProductCard(
 @Composable
 @Preview
 fun RecommendedProductCardPreview(){
-    RecommendedProductCard(recommendedProduct = recommendedProducts[0])
+    RecommendedProductCard(recommendedProduct = recommendedProducts[0] , {})
 }

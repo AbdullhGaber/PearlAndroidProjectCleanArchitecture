@@ -1,6 +1,7 @@
 package com.example.pearl.presentation.products
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import com.example.pearl.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
@@ -27,15 +29,21 @@ import com.example.pearl.presentation.common.HomeButton
 import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.common.SearchBar
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @Composable
-fun ProductsScreen(){
+fun ProductsScreen(
+    navigateToPreviousTab: () -> Unit,
+    navigateToScreen : (String) -> Unit
+){
     val scrollState = rememberScrollState()
-
     Box(
         modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(scrollState)
+            .fillMaxSize()
+            .verticalScroll(scrollState)
     ){
         Column(Modifier.padding(ExtraSmallPadding2)){
             Row(
@@ -44,12 +52,16 @@ fun ProductsScreen(){
                Image(
                    painter = painterResource(id = R.drawable.arrow_back),
                    contentDescription = null,
-                   modifier = Modifier.size(30.dp)
+                   modifier = Modifier
+                       .size(30.dp)
+                       .clickable {
+                           navigateToPreviousTab()
+                       }
                )
-               
+
                Spacer(modifier = Modifier.width(ExtraSmallPadding))
 
-                SearchBar(text = "Search for product")
+               SearchBar(text = "Search for product")
             }
 
             Spacer(modifier = Modifier.height(MediumPadding1))
@@ -71,7 +83,13 @@ fun ProductsScreen(){
 
             LazyRow(Modifier.fillMaxWidth()){
                 items(productTypes.size){
-                    Column(Modifier.padding(MediumPadding1)){
+                    Column(
+                        Modifier
+                            .padding(MediumPadding1)
+                            .clickable {
+                                navigateToScreen("${Route.AllProductCategoryScreen.route}/${productTypes[it]}")
+                            }
+                    ){
                         Icon(
                             painter = painterResource(id = productTypes[it].icon),
                             contentDescription = null,
@@ -103,7 +121,12 @@ fun ProductsScreen(){
 
             LazyRow(Modifier.fillMaxWidth()){
                 items(recommendedProducts.size){
-                    RecommendedProductCard(recommendedProduct = recommendedProducts[it])
+                    RecommendedProductCard(
+                        recommendedProduct = recommendedProducts[it],
+                        onCardClick = {
+                            navigateToScreen(Route.ProductDetailsScreen.route + "/${featuredProducts[it].name}")
+                        }
+                    )
                 }
             }
 
@@ -113,158 +136,38 @@ fun ProductsScreen(){
 
             Spacer(modifier = Modifier.height(ExtraSmallPadding2))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Cleanser.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Cleanser }
-                    FeaturedProductCard(featuredProduct = products[it])
+            productTypes.forEach { productType ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Text(text = productType.name , fontSize = 10.sp , fontWeight = FontWeight(600))
+                    HomeButton(
+                        text = "see more",
+                        onClick = {
+                            navigateToScreen(Route.AllProductCategoryScreen.route + "/${productType}")
+                        }
+                    )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(MediumPadding1))
+                Spacer(modifier = Modifier.height(MediumPadding1))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Moisturizer.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
-                    FeaturedProductCard(featuredProduct = products[it])
+                LazyRow(Modifier.fillMaxWidth()){
+                    val products = featuredProducts.filter { it.type == productType }
+                    items(3){
+                        if(products.size >= 3){
+                            FeaturedProductCard(
+                                featuredProduct = products[it],
+                                onCardClick = {
+                                    navigateToScreen(Route.ProductDetailsScreen.route + "/${products[it].name}")
+                                }
+                            )
+                        }
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(MediumPadding1))
             }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Cleanser.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Cleanser }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Moisturizer.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Cleanser.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Cleanser }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Moisturizer.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Cleanser.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Cleanser }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = ProductType.Moisturizer.name , fontSize = 10.sp , fontWeight = FontWeight(600))
-                HomeButton(text = "see more", onClick = { /*TODO*/ })
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
-            LazyRow(Modifier.fillMaxWidth()){
-                items(3){
-                    val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
-                    FeaturedProductCard(featuredProduct = products[it])
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MediumPadding1))
-
         }
     }
 }
@@ -272,5 +175,5 @@ fun ProductsScreen(){
 @Composable
 @Preview
 fun ProductsScreenPreview(){
-    ProductsScreen()
+//    ProductsScreen()
 }

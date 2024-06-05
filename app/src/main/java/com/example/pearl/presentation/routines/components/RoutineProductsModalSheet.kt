@@ -34,7 +34,8 @@ import com.example.pearl.presentation.products.productTypes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutineProductsModalSheet(
-    onDismissRequest : () -> Unit
+    onDismissRequest : () -> Unit,
+    navigateToProductDetailsScreen : (String) -> Unit
 ){
     val modalSheetState = rememberModalBottomSheetState()
 
@@ -64,7 +65,12 @@ fun RoutineProductsModalSheet(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             content = {
                 items(featuredProducts.size) {
-                    FeaturedProductCard(featuredProduct = featuredProducts[it])
+                    FeaturedProductCard(
+                        featuredProduct = featuredProducts[it],
+                        onCardClick = {
+                            navigateToProductDetailsScreen(featuredProducts[it].name)
+                        }
+                    )
                 }
             }
         )
@@ -75,5 +81,5 @@ fun RoutineProductsModalSheet(
 @Composable
 @Preview
 fun RoutineProductsModalSheetPreview(){
-    RoutineProductsModalSheet({})
+    RoutineProductsModalSheet({} , {})
 }

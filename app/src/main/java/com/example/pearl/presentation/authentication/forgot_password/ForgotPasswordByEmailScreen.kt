@@ -27,11 +27,14 @@ import com.example.pearl.presentation.authentication.AuthViewModel
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
 import com.example.pearl.presentation.authentication.components.EmailTextField
+import com.example.pearl.presentation.nav_graph.Route
 
 @Composable
 fun ForgotPasswordByEmailScreen(
     authState : AuthState,
-    authEvent : (AuthEvent) -> Unit
+    authEvent : (AuthEvent) -> Unit,
+    navigateToScreen : (String) -> Unit,
+    navigateUp : () -> Unit
 ){
 
     Box(modifier = Modifier.fillMaxSize() ){
@@ -49,7 +52,12 @@ fun ForgotPasswordByEmailScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
 
-        CloseIconButton(modifier = Modifier.align(Start))
+        CloseIconButton(
+            modifier = Modifier.align(Start),
+            onClick = {
+                navigateUp()
+            }
+        )
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
@@ -108,7 +116,9 @@ fun ForgotPasswordByEmailScreen(
             Text(
                 text = forgotPasswordAnnotatedString,
                 modifier = Modifier
-                    .clickable { }
+                    .clickable {
+                        navigateToScreen(Route.ForgotPasswordByPhoneScreen.route)
+                    }
                     .padding(end = MediumPadding1),
 
                 fontWeight = FontWeight.ExtraBold ,

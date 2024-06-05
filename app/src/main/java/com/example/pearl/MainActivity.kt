@@ -1,10 +1,8 @@
 package com.example.pearl
 
 import android.Manifest
-import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,10 +10,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.pearl.presentation.nav_graph.NavGraph
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.ui.theme.PearlTheme
@@ -33,12 +29,11 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(colorResource(id = R.color.primary_background))
                 ){
-                    NavGraph(startDestination = Route.AuthNavigation.route)
+                    NavGraph(startDestination = Route.AppStartNavigation.route)
                 }
             }
         }
     }
-
     private fun askForSmsPermission(){
                 ActivityCompat.requestPermissions(
                     this,

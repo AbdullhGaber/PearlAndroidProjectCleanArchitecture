@@ -47,6 +47,10 @@ sealed class ProductType(
         name = "Lip Care"
     )
 
+    override fun toString(): String {
+        return this.name
+    }
+
 }
 
 val productTypes = listOf(

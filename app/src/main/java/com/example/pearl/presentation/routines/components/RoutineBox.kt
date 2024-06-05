@@ -20,18 +20,19 @@ import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.presentation.routines.RoutineBoxData
-import com.example.pearl.presentation.routines.routineBoxes
+import com.example.pearl.presentation.routines.RoutineTime
 
 @Composable
 fun RoutineBox(
-    routineBoxData: RoutineBoxData
+    routineBoxData: RoutineBoxData,
+    onClick : (RoutineTime) -> Unit
 ){
    Box(
        modifier = Modifier
            .padding(10.dp)
            .clip(RoundedCornerShape(10.dp))
            .background(routineBoxData.backgroundColor)
-           .clickable {  },
+           .clickable { onClick(routineBoxData.routineTime!!) },
    ){
        Row(Modifier
            .padding(horizontal = 10.dp, vertical = 20.dp)
@@ -82,5 +83,5 @@ fun RoutineBox(
 @Composable
 @Preview
 fun RoutineBoxPreview(){
-    RoutineBox(routineBoxes[3])
+//    RoutineBox(routineBoxes[3])
 }

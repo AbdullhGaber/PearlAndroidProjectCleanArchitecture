@@ -46,7 +46,7 @@ val featuredProducts = listOf(
 
     FeaturedProduct(
         image = R.drawable.shaan_gel_cleanser,
-        name = "Shaan",
+        name = "Shaan 1",
         type = ProductType.Cleanser,
         description = "Facial cleanser antioxidant"
     ),
@@ -60,7 +60,7 @@ val featuredProducts = listOf(
 
     FeaturedProduct(
         image = R.drawable.shaan_moisturizer,
-        name = "Shaan",
+        name = "Shaan 2",
         type = ProductType.Moisturizer,
         description = "Soothing Gel with vitamin E",
         isFavorite = true
@@ -68,7 +68,7 @@ val featuredProducts = listOf(
 
     FeaturedProduct(
         image = R.drawable.shaan_moisturizer,
-        name = "Shaan",
+        name = "Shaan 3",
         type = ProductType.Moisturizer,
         description = "Soothing Gel with vitamin E",
         isFavorite = true
@@ -107,7 +107,7 @@ val featuredProducts = listOf(
 
     FeaturedProduct(
         image = R.drawable.shaan_moisturizer,
-        name = "Shaan",
+        name = "Shaan 4",
         type = ProductType.Moisturizer,
         description = "Soothing Gel with vitamin E"
     ),

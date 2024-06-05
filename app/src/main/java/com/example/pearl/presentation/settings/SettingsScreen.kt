@@ -2,6 +2,7 @@ package com.example.pearl.presentation.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,10 +15,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pearl.R
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @Composable
-fun SettingsScreen(){
+fun SettingsScreen(
+    navigateToScreen : (String) -> Unit,
+    navigateToPreviousTab : () -> Unit
+){
     Box(
         modifier = Modifier.background(Color.White).fillMaxSize()
     ){
@@ -29,7 +38,11 @@ fun SettingsScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable {
+                            navigateToPreviousTab()
+                        },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -45,7 +58,9 @@ fun SettingsScreen(){
             Spacer(modifier = Modifier.height(55.dp))
 
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().clickable {
+                      navigateToScreen(Route.HelpCenterScreen.route)
+                },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -64,7 +79,7 @@ fun SettingsScreen(){
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().clickable {  navigateToScreen(Route.PasswordManagerScreen.route)  },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -82,7 +97,7 @@ fun SettingsScreen(){
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().clickable {  navigateToScreen(Route.DeleteAccountScreen.route)  },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -104,5 +119,5 @@ fun SettingsScreen(){
 @Composable
 @Preview
 fun PreviewSettingsScreen(){
-    SettingsScreen()
+    SettingsScreen({},{})
 }

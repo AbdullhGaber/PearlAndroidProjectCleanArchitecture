@@ -2,6 +2,7 @@ package com.example.pearl.presentation.community
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,9 +22,13 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.presentation.community.components.AdCard
 import com.example.pearl.presentation.community.components.PostCard
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
 
 @Composable
-fun CommunityScreen(){
+fun CommunityScreen(
+    navigateToTab : (String) -> Unit
+){
     val state = rememberScrollState()
 
     Box(
@@ -40,10 +45,7 @@ fun CommunityScreen(){
                horizontalArrangement = Arrangement.SpaceBetween,
                verticalAlignment = Alignment.CenterVertically
            ) {
-               Image(
-                   painter = painterResource(id = R.drawable.ic_baseline_menu_24),
-                   contentDescription = null
-               )
+               Spacer(modifier = Modifier.size(24.dp))
 
                Row(verticalAlignment = Alignment.CenterVertically){
                    Image(
@@ -57,7 +59,10 @@ fun CommunityScreen(){
 
                    Image(
                        painter = painterResource(id = R.drawable.ic_baseline_notifications_none_24),
-                       contentDescription = null
+                       contentDescription = null,
+                       modifier = Modifier.clickable {
+                           navigateToTab(Route.NotificationScreen.route)
+                       }
                    )
                }
            }
@@ -109,5 +114,5 @@ fun CommunityScreen(){
 @Composable
 @Preview
 fun PreviewCommunityScreen(){
-    CommunityScreen()
+//    CommunityScreen()
 }

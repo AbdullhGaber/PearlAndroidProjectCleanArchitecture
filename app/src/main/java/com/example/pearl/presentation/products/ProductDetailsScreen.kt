@@ -2,6 +2,7 @@ package com.example.pearl.presentation.products
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -29,7 +30,9 @@ import com.example.pearl.presentation.products.components.CollapsingDropdownMenu
 
 @Composable
 fun ProductDetailsScreen(
-    product: FeaturedProduct
+    product: FeaturedProduct,
+    navigateToProductDetailsScreen : (String) -> Unit,
+    navigateToPrevious : () -> Unit
 ){
     val state = rememberScrollState()
 
@@ -52,6 +55,9 @@ fun ProductDetailsScreen(
                        contentDescription = null,
                        modifier = Modifier
                            .align(TopStart)
+                           .clickable {
+                               navigateToPrevious()
+                           }
                    )
 
                    Text(
@@ -143,9 +149,14 @@ fun ProductDetailsScreen(
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            LazyRow(Modifier.fillMaxWidth()){
+               val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
                items(3){
-                   val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
-                   FeaturedProductCard(featuredProduct = products[it])
+                   FeaturedProductCard(
+                       featuredProduct = products[it] ,
+                       onCardClick = {
+                           navigateToProductDetailsScreen(products[it].name)
+                       }
+                   )
                }
            }
        }
@@ -155,5 +166,5 @@ fun ProductDetailsScreen(
 @Preview
 @Composable
 fun ProductDetailsScreenPreview(){
-    ProductDetailsScreen(featuredProducts[1])
+    ProductDetailsScreen(featuredProducts[1], {} , {})
 }

@@ -3,6 +3,7 @@ package com.example.pearl.presentation.dermatologists
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
@@ -24,10 +25,13 @@ import com.example.pearl.R
 import com.example.pearl.presentation.common.SearchBar
 import com.example.pearl.presentation.dermatologists.components.DermatologistCard
 import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NearestDermatologistsScreen(){
+fun NearestDermatologistsScreen(
+    navigateToPrevious : () -> Unit
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +50,11 @@ fun NearestDermatologistsScreen(){
                         Image(
                             painter = painterResource(id = R.drawable.arrow_back),
                             contentDescription = null,
-                            modifier = Modifier.align(Alignment.TopStart),
+                            modifier = Modifier.
+                            align(Alignment.TopStart).
+                            clickable {
+                                  navigateToPrevious()
+                            },
                             contentScale = ContentScale.FillBounds
                         )
 
@@ -195,5 +203,5 @@ fun NearestDermatologistsScreen(){
 @Preview
 @Composable
 fun PreviewNearestDermatologists(){
-    NearestDermatologistsScreen()
+    NearestDermatologistsScreen({})
 }

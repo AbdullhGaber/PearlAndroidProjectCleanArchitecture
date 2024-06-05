@@ -8,7 +8,8 @@ data class Doctor(
     val name : String,
     val location : String,
     val rate : String,
-    val experience : String
+    val experience : String,
+    val description : String = ""
 )
 
 val doctors = listOf(
@@ -17,7 +18,8 @@ val doctors = listOf(
         name = "Dr. Mariam Zahran",
         location = "El-Mansoura",
         rate = "4.8",
-        experience = "7 years"
+        experience = "7 years",
+        description = "Dr. Mariam, an accomplished dermatologist rs of specialized experience, excels in diagnosing"
     ),
 
     Doctor(

@@ -2,6 +2,7 @@ package com.example.pearl.presentation.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +26,8 @@ import com.example.pearl.presentation.common.PrimaryButton
 @Composable
 fun PasswordManagerScreen(
     authState : AuthState,
-    authEvent: (AuthEvent) -> Unit
+    authEvent: (AuthEvent) -> Unit,
+    navigateToPrevious : () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -40,7 +42,11 @@ fun PasswordManagerScreen(
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier.
+                    align(Alignment.TopStart).
+                    clickable {
+                        navigateToPrevious()
+                    },
                     contentScale = ContentScale.FillBounds
                 )
 

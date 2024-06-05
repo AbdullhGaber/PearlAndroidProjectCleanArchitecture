@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
+import com.example.pearl.presentation.book_appointment.components.DoctorAppointmentButton
 import com.example.pearl.presentation.dermatologists.DermatologistCardData
 import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
 

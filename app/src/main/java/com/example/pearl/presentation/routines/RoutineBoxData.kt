@@ -3,7 +3,6 @@ package com.example.pearl.presentation.routines
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.example.pearl.R
-import com.example.pearl.presentation.home.RoutineCardData
 
 data class RoutineBoxData(
     val backgroundColor : Color,
@@ -11,7 +10,8 @@ data class RoutineBoxData(
     val title : String,
     val time : String,
     val isNight : Boolean = false,
-    val number : Int? = null
+    val number : Int? = null,
+    val routineTime : RoutineTime?
 )
 
 val routineBoxes = listOf(
@@ -20,7 +20,8 @@ val routineBoxes = listOf(
         icon = R.drawable.sun_routine,
         title = "Your Morning Routine",
         time = "9:30 AM",
-        number = 5
+        number = 5,
+        routineTime = RoutineTime.MORNING
     ),
 
     RoutineBoxData(
@@ -29,7 +30,8 @@ val routineBoxes = listOf(
         title = "Your Night Routine",
         time = "9:30 AM",
         isNight = true,
-        number = 7
+        number = 7,
+        routineTime = RoutineTime.NIGHT
     ),
 
     RoutineBoxData(
@@ -37,7 +39,8 @@ val routineBoxes = listOf(
         icon = R.drawable.calender_routine,
         title = "Your Weekly Routine",
         time = "Every Sunday",
-        number = 5
+        number = 5,
+        routineTime = RoutineTime.WEEKLY
     ),
 
     RoutineBoxData(
@@ -45,5 +48,6 @@ val routineBoxes = listOf(
         icon = R.drawable.fluent_food_24_filled,
         title = "Your Nutrition Routine",
         time = "Track your daily water and nutrition intake",
+        routineTime = null
     ),
 )

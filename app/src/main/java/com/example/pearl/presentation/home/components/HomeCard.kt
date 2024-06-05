@@ -2,7 +2,7 @@ package com.example.pearl.presentation.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -19,24 +19,29 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.R
 import com.example.pearl.presentation.common.HomeButton
 import com.example.pearl.presentation.common.RecommendedProductCard
-import com.example.pearl.presentation.home.HomeViewModel
+import com.example.pearl.presentation.home.HomeScreenEvents
+import com.example.pearl.presentation.home.HomeScreenState
 import com.example.pearl.presentation.home.doctors
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.home.routineCards
-import kotlin.math.roundToInt
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
+import com.example.pearl.presentation.products.featuredProducts
+
 
 @Composable
-fun HomeCard(){
-    val homeViewModel : HomeViewModel = hiltViewModel()
+fun HomeCard(
+    navigateToScreen: (String) -> Unit,
+    homeScreenState: HomeScreenState,
+    homeScreenEvents: (HomeScreenEvents) -> Unit
+){
     val scrollState = rememberScrollState()
     Box(
         modifier = Modifier
@@ -55,9 +60,10 @@ fun HomeCard(){
                        .weight(1f)
                        .clip(RoundedCornerShape(20.dp))
                ){
-                   Row(Modifier
-                       .fillMaxSize()
-                       .padding(MediumPadding1)
+                   Row(
+                       Modifier
+                           .fillMaxSize()
+                           .padding(MediumPadding1)
                    ){
                         Column(Modifier.weight(1f)){
 
@@ -87,9 +93,10 @@ fun HomeCard(){
                        .weight(1f)
                        .clip(RoundedCornerShape(20.dp))
                ){
-                   Row(Modifier
-                       .fillMaxSize()
-                       .padding(MediumPadding1)
+                   Row(
+                       Modifier
+                           .fillMaxSize()
+                           .padding(MediumPadding1)
                    ){
                        Column(Modifier.weight(1f)){
 
@@ -120,9 +127,14 @@ fun HomeCard(){
 
            Row{
                for(routineCard in routineCards){
-                   RoutineCard(routineCard = routineCard , modifier = Modifier
-                       .weight(1f)
-                       .padding(horizontal = ExtraSmallPadding2))
+                   RoutineCard(
+                       routineCard = routineCard , modifier = Modifier
+                           .weight(1f)
+                           .padding(horizontal = ExtraSmallPadding2)
+                           .clickable {
+                               navigateToScreen(Route.RoutineNavigation.route)
+                           }
+                   )
                }
            }
 
@@ -130,27 +142,51 @@ fun HomeCard(){
 
            Text(text = "Your Nutrition Routine" , fontSize = 12.sp , fontWeight = SemiBold)
 
-           NutritionRoutineBox()
+           NutritionRoutineBox(
+               modifier = Modifier.clickable{
+                   navigateToScreen(Route.NutritionRoutineScreen.route)
+               },
+               onButtonClick = {
+                   navigateToScreen(Route.NutritionRoutineScreen.route)
+               }
+           )
 
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            Text(text = "Your Skin Progress" , fontSize = 12.sp , fontWeight = SemiBold)
 
-           TrackYourSkinBox()
+           TrackYourSkinBox(
+               modifier = Modifier.clickable{
+                   navigateToScreen(Route.ProgressScreen.route)
+               },
+               onButtonClick = {
+                   navigateToScreen(Route.ProgressScreen.route)
+               }
+           )
 
            Row(
                modifier = Modifier.fillMaxWidth(),
                horizontalArrangement = Arrangement.SpaceBetween
-           ) {
+           ){
                Text(text = "Recommended Products" , fontSize = 12.sp , fontWeight = FontWeight(600))
-               HomeButton(text = "see more", onClick = { /*TODO*/ })
+               HomeButton(
+                   text = "see more",
+                   onClick = {
+                       navigateToScreen(Route.RecommendedProductsScreen.route)
+                   }
+               )
            }
 
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            LazyRow(Modifier.fillMaxWidth()){
-               items(recommendedProducts.size){
-                   RecommendedProductCard(recommendedProduct = recommendedProducts[it])
+               items(featuredProducts.size){
+                   RecommendedProductCard(
+                       recommendedProduct = recommendedProducts[it] ,
+                       onCardClick = {
+                           navigateToScreen("${Route.ProductDetailsScreen.route}/${featuredProducts[it].name}")
+                       }
+                   )
                }
            }
 
@@ -161,12 +197,19 @@ fun HomeCard(){
                horizontalArrangement = Arrangement.SpaceBetween
            ) {
                Text(text = "Nearest Dermatologists" , fontSize = 12.sp , fontWeight = FontWeight(600))
-               HomeButton(text = "see more", onClick = { /*TODO*/ })
+               HomeButton(text = "see more", onClick = {
+                   navigateToScreen(Route.NearestDermatologistsScreen.route)
+               })
            }
 
            LazyRow(Modifier.fillMaxWidth()){
                items(doctors.size){
-                   DoctorCard(doctor = doctors[it])
+                   DoctorCard(
+                       doctor = doctors[it],
+                       onCardClick = {
+                           navigateToScreen(Route.DermatologistDetailsScreen.route+"/${doctors[it].name}")
+                       }
+                   )
                }
            }
 
@@ -180,5 +223,5 @@ fun HomeCard(){
 @Composable
 @Preview
 fun HomeCardPreview(){
-    HomeCard()
+//    HomeCard()
 }

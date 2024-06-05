@@ -3,6 +3,7 @@ package com.example.pearl.presentation.my_appointments
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
@@ -23,14 +24,15 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.presentation.my_appointments.components.CompletedScheduleCard
 import com.example.pearl.presentation.common.SearchBar
-import com.example.pearl.presentation.dermatologists.MyAppointmentScreen
 import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
 import com.example.pearl.presentation.dermatologists.dermatologistsSchedule
 import com.example.pearl.presentation.my_appointments.components.CancelledScheduleCard
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyAppointmentsScreen(){
+fun MyAppointmentsScreen(
+    navigateToPreviousTab : () -> Unit
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +50,11 @@ fun MyAppointmentsScreen(){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable {
+                            navigateToPreviousTab()
+                        },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -197,5 +203,5 @@ fun MyAppointmentsScreen(){
 @Composable
 @Preview
 fun PreviewMyAppointmentsScreen(){
-    MyAppointmentsScreen()
+//    MyAppointmentsScreen()
 }

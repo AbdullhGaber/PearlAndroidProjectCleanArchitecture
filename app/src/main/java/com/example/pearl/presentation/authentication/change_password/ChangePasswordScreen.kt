@@ -23,7 +23,9 @@ import com.example.pearl.presentation.authentication.components.PasswordTextFiel
 @Composable
 fun ChangePasswordScreen(
     authState : AuthState ,
-    authEvent: (AuthEvent) -> Unit
+    authEvent: (AuthEvent) -> Unit,
+    navigateToScreen : (String) -> Unit,
+    navigateUp : () -> Unit
 ){
 
     Box(modifier = Modifier.fillMaxSize() ){
@@ -41,7 +43,12 @@ fun ChangePasswordScreen(
             .padding(top = Dimens.ExtraPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CloseIconButton(modifier = Modifier.align(Start))
+        CloseIconButton(
+            modifier = Modifier.align(Start),
+            onClick = {
+                navigateUp()
+            }
+        )
 
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
@@ -55,7 +62,6 @@ fun ChangePasswordScreen(
                 .fillMaxWidth()
                 .padding(horizontal = Dimens.MediumPadding1, vertical = Dimens.MediumPadding1)
         ){
-
 
             Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
@@ -77,8 +83,6 @@ fun ChangePasswordScreen(
 
         PrimaryButton(text = "Send" , onClick = {})
     }
-
-
 }
 
 @Composable

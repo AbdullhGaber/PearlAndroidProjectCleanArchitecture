@@ -29,6 +29,7 @@ import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.authentication.components.EmailTextField
 import com.example.pearl.presentation.authentication.components.PasswordTextField
 import com.example.pearl.presentation.common.SocialMediaButton
+import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.sign_in.components.CenteredTextBetweenTwoLines
 import com.example.pearl.presentation.util.LoadingDialog
 
@@ -38,7 +39,7 @@ fun SignInScreen(
     authState : AuthState,
     authFlowState: AuthFlowState,
     authEvent : (AuthEvent) -> Unit,
-    navigateToSignUp : () -> Unit,
+    navigateToScreen : (String) -> Unit,
 ){
     LoadingDialog(isLoading = authFlowState.isLoading)
 
@@ -84,7 +85,9 @@ fun SignInScreen(
         Text(
             text = "Forgot your password ?",
             modifier = Modifier
-                .clickable { }
+                .clickable {
+                    navigateToScreen(Route.ForgotPasswordByPhoneScreen.route)
+                }
                 .align(End)
                 .padding(end = MediumPadding1),
 
@@ -127,7 +130,7 @@ fun SignInScreen(
                 .align(Start)
                 .padding(horizontal = MediumPadding1)
                 .clickable {
-                    navigateToSignUp()
+                    navigateToScreen(Route.SignUpScreen.route)
                 }
         )
 

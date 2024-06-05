@@ -11,31 +11,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.pearl.presentation.authentication.AuthViewModel
+import com.example.pearl.presentation.authentication.change_password.ChangePasswordScreen
+import com.example.pearl.presentation.authentication.forgot_password.ForgotPasswordByEmailScreen
+import com.example.pearl.presentation.authentication.forgot_password.ForgotPasswordByPhoneNumberScreen
 import com.example.pearl.presentation.authentication.otp.OTPScreen
 import com.example.pearl.presentation.authentication.otp.OTPScreenType
 import com.example.pearl.presentation.authentication.otp.otpInfoMap
 import com.example.pearl.presentation.authentication.sign_in.SignInScreen
 import com.example.pearl.presentation.authentication.sign_up.SignUpScreen
-import com.example.pearl.presentation.home.HomeScreen
 import com.example.pearl.presentation.introduction.IntroductionScreen
 import com.example.pearl.presentation.onboarding.OnBoardingScreen
+import com.example.pearl.presentation.pearl_navigator.NavigatorViewModel
+import com.example.pearl.presentation.pearl_navigator.PearlNavigator
+import com.example.pearl.presentation.privacy_policy.PrivacyPolicy
 import com.example.pearl.presentation.skin_quiz.QuestionViewModel
 import com.example.pearl.presentation.skin_quiz.QuizScreen
 
 @Composable
 fun NavGraph(
-    startDestination : String
+    startDestination : String,
 ){
     val navController  = rememberNavController()
     val authViewModel : AuthViewModel = hiltViewModel()
-    val state by authViewModel.mAuthFlowState.collectAsStateWithLifecycle()
+    val authFlowState by authViewModel.mAuthFlowState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController , startDestination = startDestination){
         navigation(
             route = Route.AppStartNavigation.route,
             startDestination = Route.IntroductionScreen.route
         ){
-
             composable(route = Route.IntroductionScreen.route){
                 IntroductionScreen(
                     navigateToOnBoardingScreen = {
@@ -57,19 +61,16 @@ fun NavGraph(
             }
         }
 
-        navigation(startDestination = Route.SignUpScreen.route, route = Route.AuthNavigation.route){
+        navigation(route = Route.AuthNavigation.route, startDestination = Route.SignUpScreen.route){
             composable(
                 route = Route.SignUpScreen.route
             ){
                 SignUpScreen(
                     authState = authViewModel.mAuthState.value,
-                    authFlowState = state,
+                    authFlowState = authFlowState,
                     authEvent = authViewModel::onEvent,
-                    navigateToSignIn = {
-                        navigateToTab(navController = navController , Route.SignInScreen.route)
-                    },
-                    navigateToOTPScreen = {
-                        navigateToTab(navController = navController , Route.OTPScreen.route)
+                    navigateToScreen = {
+                        navigateToTab(navController = navController , it)
                     }
                 )
             }
@@ -79,10 +80,10 @@ fun NavGraph(
             ){
                 SignInScreen(
                     authState = authViewModel.mAuthState.value,
-                    authFlowState = state,
+                    authFlowState = authFlowState,
                     authEvent = authViewModel::onEvent,
-                    navigateToSignUp = {
-                        navigateToTab(navController = navController , Route.SignUpScreen.route)
+                    navigateToScreen = {
+                        navigateToTab(navController = navController , it)
                     }
                 )
             }
@@ -99,6 +100,53 @@ fun NavGraph(
                     }
                 )
             }
+
+            composable(route = Route.ForgotPasswordByPhoneScreen.route){
+                ForgotPasswordByPhoneNumberScreen(
+                    authEvent = authViewModel::onEvent ,
+                    authState = authViewModel.mAuthState.value,
+                    navigateToScreen = {
+                        navigateToTab(navController , it)
+                    },
+                    navigateUp = {
+                        navigateToPreviousTab(navController)
+                    }
+                )
+            }
+
+            composable(route = Route.ForgotPasswordByEmailScreen.route){
+                ForgotPasswordByEmailScreen(
+                    authEvent = authViewModel::onEvent ,
+                    authState = authViewModel.mAuthState.value,
+                    navigateToScreen = {
+                        navigateToTab(navController , it)
+                    },
+                    navigateUp = {
+                        navigateToPreviousTab(navController)
+                    }
+                )
+            }
+
+            composable(route = Route.ChangePasswordScreen.route){
+                ChangePasswordScreen(
+                    authEvent = authViewModel::onEvent,
+                    authState = authViewModel.mAuthState.value,
+                    navigateToScreen = {
+                        navigateToTab(navController , it)
+                    },
+                    navigateUp = {
+                        navigateToPreviousTab(navController)
+                    }
+                )
+            }
+
+            composable(route = Route.PrivacyPolicyScreen.route){
+                PrivacyPolicy(
+                    navigateToPreviousTab = {
+                        navigateToPreviousTab(navController)
+                    }
+                )
+            }
         }
 
         composable(route = Route.QuizScreen.route){
@@ -112,8 +160,9 @@ fun NavGraph(
             )
         }
 
-        composable(route = Route.HomeScreen.route){
-            HomeScreen()
+        composable(route = Route.PearlNavigation.route){
+            val viewModel : NavigatorViewModel = hiltViewModel()
+            PearlNavigator(pearlNavState = viewModel.mPearlNavState.value , viewModel::onEvent)
         }
     }
 }
@@ -125,6 +174,10 @@ fun navigateToTab(navController: NavController, route : String){
             launchSingleTop = true
         }
     }
+}
+
+fun navigateToPreviousTab(navController: NavController){
+    navController.navigateUp()
 }
 
 @Preview

@@ -30,6 +30,7 @@ import com.example.pearl.presentation.authentication.sign_up.components.FirstNam
 import com.example.pearl.presentation.authentication.sign_up.components.PhoneNumberTextField
 import com.example.pearl.presentation.authentication.sign_up.components.LastNameTextField
 import com.example.pearl.presentation.common.*
+import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.sign_in.components.CenteredTextBetweenTwoLines
 import com.example.pearl.presentation.util.LoadingDialog
 
@@ -38,8 +39,7 @@ fun SignUpScreen(
     authState: AuthState,
     authFlowState: AuthFlowState,
     authEvent: (AuthEvent) -> Unit,
-    navigateToSignIn : () -> Unit,
-    navigateToOTPScreen : () -> Unit,
+    navigateToScreen : (String) -> Unit,
 ){
     Box(modifier = Modifier.fillMaxSize() ){
         Image(
@@ -59,6 +59,7 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LoadingDialog(isLoading = authFlowState.isLoading)
+
         Text(text = "Sign Up" , fontWeight = FontWeight.ExtraBold , fontSize = 33.sp)
 
         Spacer(modifier = Modifier.height(Dimens.MediumPadding2))
@@ -103,7 +104,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
         PrimaryButton(text = "Sign Up" , onClick = {
-            navigateToOTPScreen()
+            navigateToScreen(Route.OTPScreen.route)
         })
 
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
@@ -152,8 +153,6 @@ fun SignUpScreen(
             ){
                 append("privacy policy")
             }
-
-
         }
 
         val signInAnnotatedString = buildAnnotatedString {
@@ -184,6 +183,9 @@ fun SignUpScreen(
             modifier = Modifier
                 .align(Alignment.Start)
                 .padding(horizontal = Dimens.MediumPadding1)
+                .clickable {
+                    navigateToScreen(Route.PrivacyPolicyScreen.route)
+                }
         )
 
         Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
@@ -194,7 +196,7 @@ fun SignUpScreen(
                 .align(Alignment.Start)
                 .padding(horizontal = Dimens.MediumPadding1)
                 .clickable {
-                    navigateToSignIn()
+                    navigateToScreen(Route.SignInScreen.route)
                 }
         )
 

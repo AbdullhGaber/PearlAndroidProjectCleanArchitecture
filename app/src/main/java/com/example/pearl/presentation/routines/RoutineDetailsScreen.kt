@@ -2,6 +2,7 @@ package com.example.pearl.presentation.routines
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,9 +30,14 @@ import com.example.pearl.presentation.products.productTypes
 import com.example.pearl.presentation.routines.components.AddRoutineSection
 import com.example.pearl.presentation.routines.components.RoutineProductsModalSheet
 
-
+typealias RoutineEventFunction = (RoutineEvents) -> Unit
 @Composable
-fun RoutineDetailsScreen(){
+fun RoutineDetailsScreen(
+    routineDetailsState: RoutineDetailsState,
+    routineEvents: RoutineEventFunction,
+    navigateToPrevious : () -> Unit,
+    navigateToProductDetailsScreen : (String) -> Unit
+){
     val isSheetShown = remember {
         mutableStateOf(false)
     }
@@ -39,7 +45,7 @@ fun RoutineDetailsScreen(){
     Box(modifier = Modifier.fillMaxSize()){
         Box(modifier = Modifier.fillMaxSize() ){
             Image(
-                painter = painterResource(id = R.drawable.bg_day_routine) ,
+                painter = painterResource(id = routineDetailsState.centerPosRoutineTime.bgImage) ,
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),
                 contentScale = ContentScale.FillBounds
@@ -47,17 +53,21 @@ fun RoutineDetailsScreen(){
         }
         
         Column{
-
-            Box(modifier = Modifier.wrapContentSize()){
-                Image(
-                    painter = painterResource(id = R.drawable.arrow_back),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 10.dp, top = 10.dp)
-                        .align(Alignment.TopStart)
-                )
+            Row(Modifier.fillMaxWidth().padding(20.dp).fillMaxWidth()) {
+                Box(modifier = Modifier.fillMaxWidth()){
+                    Image(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(start = 10.dp, top = 10.dp)
+                            .align(Alignment.TopStart)
+                            .clickable {
+                                navigateToPrevious()
+                            }
+                    )
+                }
             }
-            
+
             Spacer(modifier = Modifier.height(ExtraSmallPadding2))
 
             Row(
@@ -69,25 +79,31 @@ fun RoutineDetailsScreen(){
             ) {
 
                 Image(
-                    painter = painterResource(id = R.drawable.routine_helal_time),
+                    painter = painterResource(id = routineDetailsState.startPosRoutineTime.icon),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(0.dp)
                         .wrapContentSize()
                         .size(24.dp)
+                        .clickable {
+                            routineEvents(
+                                RoutineEvents.SwitchRoutineTime(routineDetailsState.startPosRoutineTime , RoutineTimePositions.START)
+                            )
+                        }
                 )
 
                 Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally){
 
                     Image(
-                        painter = painterResource(id = R.drawable.routine_sun_time),
+                        painter = painterResource(id = routineDetailsState.centerPosRoutineTime.icon),
                         contentDescription = null,
                         modifier = Modifier.padding(top = 30.dp)
                     )
+
                     Spacer(modifier = Modifier.height(MediumPadding1))
 
                     Text(
-                        text = "Morning Routine",
+                        text = routineDetailsState.centerPosRoutineTime.title,
                         fontSize = 20.sp,
                         fontWeight = FontWeight(600),
                         color = Color(0xFF000000),
@@ -95,12 +111,17 @@ fun RoutineDetailsScreen(){
                 }
 
                 Image(
-                    painter = painterResource(id = R.drawable.routine_weekly_time),
+                    painter = painterResource(id = routineDetailsState.endPosRoutineTime.icon),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(0.dp)
                         .wrapContentSize()
                         .size(24.dp)
+                        .clickable {
+                            routineEvents(
+                                RoutineEvents.SwitchRoutineTime(routineDetailsState.endPosRoutineTime,RoutineTimePositions.END)
+                            )
+                        }
                 )
                 
             }
@@ -108,6 +129,7 @@ fun RoutineDetailsScreen(){
             Spacer(modifier = Modifier.height(MediumPadding1))
 
             val scrollState = rememberScrollState()
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
@@ -130,11 +152,13 @@ fun RoutineDetailsScreen(){
                             onAddClick = {
                                 isSheetShown.value = true
                             },
-                            onDeleteClick = {}
+
+                            onDeleteClick = {
+
+                            }
                         )
 
                         Spacer(modifier = Modifier.height(MediumPadding1))
-
 
                     }
 
@@ -154,7 +178,10 @@ fun RoutineDetailsScreen(){
 
                         if(isSheetShown.value){
                             RoutineProductsModalSheet(
-                                onDismissRequest = {isSheetShown.value = false}
+                                onDismissRequest = {isSheetShown.value = false},
+                                navigateToProductDetailsScreen = {
+                                    navigateToProductDetailsScreen(it)
+                                }
                             )
                         }
                     }
@@ -168,5 +195,5 @@ fun RoutineDetailsScreen(){
 @Composable
 @Preview
 fun RoutineDetailsScreenPreview(){
-    RoutineDetailsScreen()
+//    RoutineDetailsScreen()
 }

@@ -5,7 +5,13 @@
       <entry key="HomeScreenPreview">
         <State />
       </entry>
+      <entry key="OTPTextFieldsPreview">
+        <State />
+      </entry>
       <entry key="PreviewPearlNavigator">
+        <State />
+      </entry>
+      <entry key="PreviewProfileScreen">
         <State />
       </entry>
       <entry key="app">

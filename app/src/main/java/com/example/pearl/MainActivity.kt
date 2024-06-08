@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(colorResource(id = R.color.primary_background))
                 ){
-                    NavGraph(startDestination = Route.AppStartNavigation.route)
+                    NavGraph(startDestination = Route.AuthNavigation.route)
                 }
             }
         }

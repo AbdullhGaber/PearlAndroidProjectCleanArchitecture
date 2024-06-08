@@ -22,7 +22,7 @@ import com.example.pearl.presentation.authentication.components.PasswordTextFiel
 
 @Composable
 fun ChangePasswordScreen(
-    authState : AuthState ,
+    authState : AuthState = AuthState(),
     authEvent: (AuthEvent) -> Unit,
     navigateToScreen : (String) -> Unit,
     navigateUp : () -> Unit
@@ -88,5 +88,5 @@ fun ChangePasswordScreen(
 @Composable
 @Preview
 fun ChangePasswordPreview(){
-//    ChangePasswordScreen()
+    ChangePasswordScreen(authEvent = {} , navigateUp = {}, navigateToScreen = {})
 }

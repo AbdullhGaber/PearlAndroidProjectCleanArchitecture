@@ -44,7 +44,10 @@ fun PasswordTextField(
         OutlinedTextField(
             value = authState.password,
             enabled = enabled,
-            onValueChange = { authEvent(AuthEvent.UpdatePasswordField(it)) },
+            onValueChange = {
+                authEvent(AuthEvent.UpdatePasswordField(it))
+                authEvent(AuthEvent.ValidatePassword)
+            },
             label = { Text(label) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,

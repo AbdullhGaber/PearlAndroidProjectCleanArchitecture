@@ -1,6 +1,7 @@
 package com.example.pearl.presentation.authentication.otp
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,16 +27,30 @@ import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
 import com.example.pearl.presentation.authentication.components.OTPTextField
+import com.example.pearl.presentation.util.ErrorDialog
+import com.example.pearl.presentation.util.LoadingDialog
 
 @Composable
 fun OTPScreen(
     otpInfo: OTPInfo,
     authEvent : (AuthEvent) -> Unit,
-    authState: AuthState,
-    navigateToQuizScreen : () -> Unit
+    authState: AuthState = AuthState(),
+    navigateToQuizScreen : () -> Unit,
+    navigateUp : () -> Unit
 ){
-    Box(modifier = Modifier.fillMaxSize()){
+    if(authState.error != null){
+        ErrorDialog(
+            title = authState.error,
+            message = "Try again",
+            onDismiss = {
+                authEvent(AuthEvent.UpdateError(null))
+            }
+        )
+    }
 
+    LoadingDialog(isLoading = authState.isLoading)
+
+    Box(modifier = Modifier.fillMaxSize()){
         Box(modifier = Modifier.fillMaxSize() ){
             Image(
                 painter = painterResource(id = R.drawable.sign_in) ,
@@ -45,9 +60,15 @@ fun OTPScreen(
             )
         }
 
-        CloseIconButton(modifier = Modifier
-            .align(Alignment.TopStart)
-            .padding(top = Dimens.MediumPadding1))
+        CloseIconButton(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = Dimens.MediumPadding1),
+            onClick = {
+                navigateUp()
+                authEvent(AuthEvent.ResetTimer)
+            }
+        )
 
         Column(
             modifier = Modifier
@@ -78,10 +99,11 @@ fun OTPScreen(
                     .padding(horizontal = Dimens.MediumPadding1, vertical = Dimens.MediumPadding1)
             ){
                 Text(
-                    text = "4:59",
+                    text =String.format("%02d:%02d", authState.timeInSeconds / 60, authState.timeInSeconds % 60),
                     fontWeight = FontWeight.Normal,
                     fontSize = 13.sp
                 )
+                Log.e("Timer" , "seconds : ${authState.timeInSeconds}")
 
                 Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
@@ -115,28 +137,37 @@ fun OTPScreen(
                     }
                 }
 
-                Text(
-                    text = codeReceiverAnnotatedString,
-                    modifier = Modifier
-                        .clickable {
-                           //resend otp code
-                        }
-                        .padding(end = Dimens.MediumPadding1),
-                    fontWeight = FontWeight.ExtraBold ,
-                    fontSize = 13.sp
-                )
+                val context = LocalContext.current
+                if(authState.timeInSeconds == 0){
+                    Text(
+                        text = codeReceiverAnnotatedString,
+                        modifier = Modifier
+                            .clickable {
+                                authEvent(AuthEvent.SendOTPMessage(context))
+                                authEvent(AuthEvent.ResetTimer)
+                                authEvent(AuthEvent.StartTimer)
+                            }
+                            .padding(end = Dimens.MediumPadding1),
+                        fontWeight = FontWeight.ExtraBold ,
+                        fontSize = 13.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(Dimens.MediumPadding1))
 
-            val context = LocalContext.current
-
-            PrimaryButton(text = "Send Me OTP Code" , onClick = {
-                authEvent(AuthEvent.SendOTPMessage(context))
-            })
-
-            PrimaryButton(text = "Verify" , onClick = {
-                authEvent(AuthEvent.VerifyOTPCode(navigateToQuizScreen))
+            PrimaryButton(
+                text = "Verify" ,
+                onClick = {
+                authEvent(AuthEvent.VerifyOTPCode(
+                    onSuccess = {
+                        authEvent(AuthEvent.SignUp)
+                        navigateToQuizScreen()
+                    },
+                    onFailure = {
+                        authEvent(AuthEvent.UpdateError(Exception("OTP code is not correct !")))
+                    }
+                ))
             })
         }
     }
@@ -145,5 +176,10 @@ fun OTPScreen(
 @Preview
 @Composable
 fun OTPPreview(){
-//    OTPScreen(otpInfo = otpInfoMap[OTPScreenType.PasswordEmail]!!)
+   OTPScreen(
+       otpInfo = otpInfoMap[OTPScreenType.PasswordEmail]!!,
+       navigateToQuizScreen = {},
+       authEvent = {},
+       navigateUp = {}
+   )
 }

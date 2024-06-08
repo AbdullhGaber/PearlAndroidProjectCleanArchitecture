@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import com.example.pearl.presentation.authentication.AuthEvent
 
 
@@ -46,7 +47,11 @@ fun OTPTextField(
         }
     }
 
-    Row(modifier = modifier.height(50.dp)){
+    Row(
+        modifier = modifier.height(50.dp).fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
         repeat(otpSize){ index ->
             OutlinedTextField(
                 value = code.getOrNull(index)?.takeIf {
@@ -76,16 +81,15 @@ fun OTPTextField(
                     }
                 },
                 readOnly = false,
+                shape = RoundedCornerShape(8.dp) ,
                 modifier = Modifier
-                    .padding(3.dp)
-                    .clip(RoundedCornerShape(8.dp))
                     .background(Color.Transparent)
                     .size(50.dp)
                     .focusRequester(focusRequesters[index]),
                 singleLine = true,
                 textStyle = TextStyle(
                     color = Color.Black,
-                    fontSize = 10.sp,
+                    fontSize = 16.sp,
                     fontWeight = Medium,
                     textAlign = TextAlign.Center
                 ),
@@ -99,7 +103,7 @@ fun OTPTextField(
 
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun OTPTextFieldsPreview(){
     OTPTextField(otpSize = 5 , onFilled = {})
 }

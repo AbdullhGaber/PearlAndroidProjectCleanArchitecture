@@ -23,7 +23,10 @@ fun EmailTextField(
 
     OutlinedTextField(
         value = authState.email,
-        onValueChange = { authEvent(AuthEvent.UpdateEmailField(it)) },
+        onValueChange = {
+            authEvent(AuthEvent.UpdateEmailField(it))
+            authEvent(AuthEvent.ValidateEmail)
+        },
         label = { Text("Enter Your Email") },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,

@@ -1,22 +1,27 @@
 package com.example.pearl.domain.repositories
 
-import android.content.Context
-import arrow.core.Either
-import com.example.pearl.domain.model.User
-import retrofit2.Call
 
 interface AuthRepository {
     suspend fun login(
         email: String,
         password: String,
-    ) : Either<Throwable , Unit>
+        onFailure : (Throwable) -> Unit
+    )
 
     suspend fun signUp(
-        user: User,
+        userDataMap : Map<String , Any>,
+        email: String,
         password: String,
-    ) : Either<Throwable , Unit>
+        onFailure : (Throwable) -> Unit
+    )
 
     suspend fun signOut()
+
+    suspend fun resetPassword(
+        email : String,
+        onSuccess : () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
 
     fun sendOTP(to : String , from : String , body : String)
 }

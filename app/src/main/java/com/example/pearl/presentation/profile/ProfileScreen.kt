@@ -40,7 +40,9 @@ fun ProfileScreen(
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.align(Alignment.TopStart).clickable { navigateToPrevious() },
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .clickable { navigateToPrevious() },
                     contentScale = ContentScale.FillBounds
                 )
 
@@ -127,43 +129,19 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Date of birth" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
+            Text(text = "Age" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                Modifier.fillMaxWidth(),
-                Arrangement.SpaceBetween
-            ){
-                PrimaryTextField(
-                    placeholder = "1",
-                    enabled = false,
-                    trailingIcon = {
-                        Image(painter = painterResource(id = R.drawable.dropdown_arrow), contentDescription = null)
-                    },
-                    modifier = Modifier.weight(1f)
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                PrimaryTextField(
-                    placeholder = "Sep",
-                    enabled = false,
-                    trailingIcon = {
-                        Image(painter = painterResource(id = R.drawable.dropdown_arrow), contentDescription = null)
-                    },
-                    modifier = Modifier.weight(1f)
-                )
-
-                Spacer(Modifier.width(8.dp))
-
-                PrimaryTextField(
-                    placeholder = "2002",
-                    enabled = false,
-                    trailingIcon = {
-                        Image(painter = painterResource(id = R.drawable.dropdown_arrow), contentDescription = null)
-                    },
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            PrimaryTextField(
+                placeholder = "22",
+                enabled = false,
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.dropdown_arrow),
+                        contentDescription = null
+                    )
+                }
+            )
         }
     }
 }

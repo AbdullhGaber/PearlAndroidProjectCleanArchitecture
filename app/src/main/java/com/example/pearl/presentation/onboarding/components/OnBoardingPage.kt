@@ -22,11 +22,11 @@ import com.example.pearl.presentation.onboarding.pages
 fun OnBoardingPage(
     modifier: Modifier = Modifier,
     page : Page
-) {
+){
     Column(
         modifier = modifier.padding(top = ExtraPadding3),
         verticalArrangement = Arrangement.Center
-    ) {
+    ){
         Image(
             painter = painterResource(id = page.personImage),
             contentDescription = null,
@@ -58,5 +58,5 @@ fun OnBoardingPage(
 @Preview(showBackground = true)
 @Composable
 fun OnBoardingPagePreview() {
-    OnBoardingPage(page = pages[0])
+    OnBoardingPage(page = pages[1])
 }

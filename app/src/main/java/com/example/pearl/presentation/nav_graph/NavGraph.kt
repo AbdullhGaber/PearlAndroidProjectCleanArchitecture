@@ -1,10 +1,8 @@
 package com.example.pearl.presentation.nav_graph
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +10,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.pearl.presentation.authentication.AuthViewModel
 import com.example.pearl.presentation.authentication.change_password.ChangePasswordScreen
+import com.example.pearl.presentation.authentication.forgot_password.ConfirmPassword
 import com.example.pearl.presentation.authentication.forgot_password.ForgotPasswordByEmailScreen
 import com.example.pearl.presentation.authentication.forgot_password.ForgotPasswordByPhoneNumberScreen
 import com.example.pearl.presentation.authentication.otp.OTPScreen
@@ -33,7 +32,6 @@ fun NavGraph(
 ){
     val navController  = rememberNavController()
     val authViewModel : AuthViewModel = hiltViewModel()
-    val authFlowState by authViewModel.mAuthFlowState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController , startDestination = startDestination){
         navigation(
@@ -51,7 +49,6 @@ fun NavGraph(
                 )
 
             }
-
             composable(route = Route.OnBoardingScreen.route){
                 OnBoardingScreen(
                     navigateToAuthScreen = {
@@ -61,13 +58,28 @@ fun NavGraph(
             }
         }
 
+        composable(
+            route = Route.OTPScreen.route
+        ){
+            OTPScreen(
+                otpInfo = otpInfoMap[OTPScreenType.Verification]!!,
+                authEvent = authViewModel::onEvent ,
+                authState = authViewModel.mAuthState.value,
+                navigateToQuizScreen = {
+                    navigateToTab(navController = navController , Route.QuizScreen.route)
+                },
+                navigateUp = {
+                    navigateToPreviousTab(navController)
+                }
+            )
+        }
+
         navigation(route = Route.AuthNavigation.route, startDestination = Route.SignUpScreen.route){
             composable(
                 route = Route.SignUpScreen.route
             ){
                 SignUpScreen(
                     authState = authViewModel.mAuthState.value,
-                    authFlowState = authFlowState,
                     authEvent = authViewModel::onEvent,
                     navigateToScreen = {
                         navigateToTab(navController = navController , it)
@@ -80,7 +92,6 @@ fun NavGraph(
             ){
                 SignInScreen(
                     authState = authViewModel.mAuthState.value,
-                    authFlowState = authFlowState,
                     authEvent = authViewModel::onEvent,
                     navigateToScreen = {
                         navigateToTab(navController = navController , it)
@@ -97,6 +108,9 @@ fun NavGraph(
                     authState = authViewModel.mAuthState.value,
                     navigateToQuizScreen = {
                         navigateToTab(navController = navController , Route.QuizScreen.route)
+                    },
+                    navigateUp = {
+                        navigateToPreviousTab(navController)
                     }
                 )
             }
@@ -133,6 +147,19 @@ fun NavGraph(
                     authState = authViewModel.mAuthState.value,
                     navigateToScreen = {
                         navigateToTab(navController , it)
+                    },
+                    navigateUp = {
+                        navigateToPreviousTab(navController)
+                    }
+                )
+            }
+
+            composable(route = Route.ConfirmPasswordScreen.route) {
+                ConfirmPassword(
+                    authEvent = authViewModel::onEvent,
+                    authState = authViewModel.mAuthState.value,
+                    navigateToScreen = {
+                        navigateToTab(navController, it)
                     },
                     navigateUp = {
                         navigateToPreviousTab(navController)

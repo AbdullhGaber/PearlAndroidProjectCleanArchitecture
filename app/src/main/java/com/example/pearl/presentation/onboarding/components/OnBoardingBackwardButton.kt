@@ -42,7 +42,7 @@ fun OnBoardingBackwardButton(
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Right Arrow",
+                contentDescription = "Left Arrow",
                 tint = iconColor,
                 modifier = Modifier.size(iconSize)
             )

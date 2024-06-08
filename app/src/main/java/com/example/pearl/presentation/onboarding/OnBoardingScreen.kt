@@ -44,25 +44,26 @@ fun OnBoardingScreen(
        )
    }
 
-   Column(modifier = Modifier.fillMaxSize() , horizontalAlignment = Alignment.CenterHorizontally) {
+   Column( horizontalAlignment = Alignment.CenterHorizontally) {
 
       HorizontalPager(state = pageState) {
           OnBoardingPage(page = pages[pageState.currentPage])
       }
 
-      Spacer(modifier = Modifier.height(MediumPadding1))
+      Spacer(modifier = Modifier.weight(1f))
 
       PageIndicator(selectedPageIdx = pageState.currentPage)
 
-      Spacer(modifier = Modifier.height(MediumPadding1))
+      Spacer(modifier = Modifier.weight(1f))
 
       Row(
-          modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
-          horizontalArrangement = Arrangement.SpaceBetween
+          modifier = Modifier
+              .padding(horizontal = 20.dp)
+              .fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
       ){
           val scope = rememberCoroutineScope()
-
-
           when(pageState.currentPage){
               0 -> {
                   Spacer(modifier = Modifier.width(56.dp))
@@ -96,19 +97,23 @@ fun OnBoardingScreen(
                       }
                   })
 
-                  OnBoardingForwardButton(onClick = {
-                      scope.launch {
-                          pageState.animateScrollToPage(page = pageState.currentPage + 1)
+                  OnBoardingForwardButton(
+                      onClick = {
+                          scope.launch {
+                              pageState.animateScrollToPage(page = pageState.currentPage + 1)
+                          }
                       }
-                  })
+                  )
               }
           }
       }
+
+
    }
 }
 
 @Composable
 @Preview
 fun OnBoardingScreenPreview(){
-//    OnBoardingScreen()
+    OnBoardingScreen({})
 }

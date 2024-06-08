@@ -9,6 +9,7 @@ sealed class Route(val route : String){
     object SignUpScreen : Route("signUpScreen")
     object ForgotPasswordByEmailScreen : Route("forgotPasswordByEmailScreen")
     object ForgotPasswordByPhoneScreen : Route("forgotPasswordByPhoneScreen")
+    object ConfirmPasswordScreen : Route("confirmPasswordScreen")
     object ChangePasswordScreen : Route("changePasswordScreen")
     object OTPScreen : Route("otpScreen")
     object QuizScreen : Route("quizScreen")

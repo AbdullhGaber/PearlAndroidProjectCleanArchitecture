@@ -9,48 +9,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.newsapp.presentation.Dimens
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.R
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
-import com.example.pearl.presentation.authentication.AuthViewModel
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
-import com.example.pearl.presentation.authentication.components.EmailTextField
+import com.example.pearl.presentation.authentication.components.PasswordTextField
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.util.ErrorDialog
 import com.example.pearl.presentation.util.LoadingDialog
 
 @Composable
-fun ForgotPasswordByEmailScreen(
+fun ConfirmPassword(
     authState : AuthState = AuthState(),
     authEvent : (AuthEvent) -> Unit,
     navigateToScreen : (String) -> Unit,
     navigateUp : () -> Unit
 ){
     LoadingDialog(isLoading = authState.isLoading)
-
     if(authState.error != null){
         ErrorDialog(
             title = authState.error,
             message = "Try again",
-            onDismiss = { authEvent(AuthEvent.UpdateError(null)) }
+            onDismiss = {
+                authEvent(AuthEvent.UpdateError(null))
+            },
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = Modifier.fillMaxSize() ){
         Image(
             painter = painterResource(id = R.drawable.sign_in) ,
             contentDescription = null,
@@ -75,11 +70,11 @@ fun ForgotPasswordByEmailScreen(
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
-        Text(text = "Forgot Password" , fontWeight = FontWeight.ExtraBold , fontSize = 33.sp)
+        Text(text = "Confirm Password" , fontWeight = FontWeight.ExtraBold , fontSize = 33.sp)
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
-        Text(text = "Enter your email to send you an OTP" , fontWeight = FontWeight.Normal , fontSize = 13.sp)
+        Text(text = "Enter your new password you set from email" , fontWeight = FontWeight.Normal , fontSize = 13.sp)
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
@@ -88,9 +83,9 @@ fun ForgotPasswordByEmailScreen(
                 .fillMaxWidth()
                 .padding(horizontal = MediumPadding1, vertical = MediumPadding1)
         ){
-            Text(text = "Email Address" , fontWeight = FontWeight.Medium , fontSize = 20.sp)
-            EmailTextField(authState = authState , authEvent = authEvent)
-            authState.emailErrorMessage?.let{
+            Text(text = "New Password" , fontWeight = FontWeight.Medium , fontSize = 20.sp)
+            PasswordTextField(authState = authState , authEvent = authEvent)
+            authState.passwordErrorMessage?.let{
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
@@ -98,10 +93,11 @@ fun ForgotPasswordByEmailScreen(
                     modifier = Modifier.padding(start = 16.dp, top = 4.dp)
                 )
             }
+
             Spacer(modifier = Modifier.height(MediumPadding1))
 
             Text(
-                text = "We will send you an OTP code to your email, then you can be able to change your password.",
+                text = "This will be your new password so please don't forget it.",
                 modifier = Modifier
                     .clickable { }
                     .padding(end = MediumPadding1),
@@ -111,54 +107,15 @@ fun ForgotPasswordByEmailScreen(
             )
 
             Spacer(modifier = Modifier.height(MediumPadding1))
-
-            val forgotPasswordAnnotatedString = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 13.sp
-                    )
-                ){
-                    append("Don’t have access to this? ")
-                }
-
-                withStyle(
-                    style = SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 13.sp
-                    )
-                ){
-                    append("Try with mobile number")
-                }
-            }
-
-            Text(
-                text = forgotPasswordAnnotatedString,
-                modifier = Modifier
-                    .clickable {
-                        navigateToScreen(Route.ForgotPasswordByPhoneScreen.route)
-                    }
-                    .padding(end = MediumPadding1),
-
-                fontWeight = FontWeight.ExtraBold ,
-                fontSize = 13.sp
-            )
-            
-            Spacer(modifier = Modifier.height(MediumPadding1))
         }
 
         PrimaryButton(
-            text = "Send",
+            text = "Confirm",
             onClick = {
-                authEvent(AuthEvent.ResetPassword(
-                    email = authState.email,
-                    onSuccess = {
-                        navigateToScreen(Route.ConfirmPasswordScreen.route)
-                    }
-                ))
-
+                authEvent(AuthEvent.Login(authState.email , authState.password))
+                if(authState.error == null){
+                    navigateToScreen(Route.PearlNavigation.route)
+                }
             }
         )
     }
@@ -166,6 +123,6 @@ fun ForgotPasswordByEmailScreen(
 
 @Composable
 @Preview
-fun ForgetPasswordPreview(){
-   ForgotPasswordByEmailScreen(authEvent = {} , navigateToScreen =  {} , navigateUp = {})
+fun PreviewConfirmPassword(){
+    ConfirmPassword(authEvent = {} , navigateToScreen =  {} , navigateUp = {})
 }

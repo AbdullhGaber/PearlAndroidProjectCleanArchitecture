@@ -8,9 +8,11 @@ class SignUp(
     val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(
-        user: User,
+        userDataMap : Map<String , Any>,
+        email: String,
         password: String,
-    ) : Either<Throwable , Unit> {
-        return authRepository.signUp(user, password)
+        onFailure : (Throwable) -> Unit
+    ){
+        authRepository.signUp(userDataMap , email, password , onFailure)
     }
 }

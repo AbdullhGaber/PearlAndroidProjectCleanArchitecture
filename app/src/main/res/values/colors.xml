@@ -15,5 +15,6 @@
     <color name="quiz_selection">#FF79DA8D</color>
     <color name="small_text">#FF7F7F7F</color>
     <color name="grey">#FFC7B4FF</color>
+    <color name="error">#FFF44336</color>
 
 </resources>

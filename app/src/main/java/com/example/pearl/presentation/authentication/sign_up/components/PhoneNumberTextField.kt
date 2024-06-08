@@ -6,15 +6,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.simon.xmaterialccp.component.MaterialCountryCodePicker
 import com.simon.xmaterialccp.data.ccpDefaultColors
-import com.simon.xmaterialccp.data.utils.getDefaultLangCode
-import com.simon.xmaterialccp.data.utils.getDefaultPhoneCode
 import com.simon.xmaterialccp.data.utils.getLibCountries
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -52,7 +49,7 @@ fun PhoneNumberTextField(
             text = authState.phoneNo,
             onValueChange = {
                 authEvent(AuthEvent.UpdatePhoneNumber(it))
-                authEvent(AuthEvent.UpdatePhoneValidity)
+                authEvent(AuthEvent.ValidatePhone)
             },
             searchFieldPlaceHolderTextStyle = MaterialTheme.typography.bodyMedium,
             searchFieldTextStyle = MaterialTheme.typography.bodyMedium,

@@ -29,7 +29,10 @@ fun FirstNameTextField(
 
     OutlinedTextField(
         value = authState.firstName,
-        onValueChange = { authEvent(AuthEvent.UpdateFirstNameField(it)) },
+        onValueChange = {
+            authEvent(AuthEvent.UpdateFirstNameField(it))
+            authEvent(AuthEvent.ValidateName)
+        },
         label = { Text(label) },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,

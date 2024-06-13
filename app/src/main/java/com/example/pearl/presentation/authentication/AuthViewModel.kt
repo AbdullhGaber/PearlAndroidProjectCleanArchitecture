@@ -176,6 +176,10 @@ class AuthViewModel @Inject constructor(
                 validateAddresses()
             }
 
+            is AuthEvent.UpdateShowSuccessDialog -> {
+                mAuthState.value = mAuthState.value.copy(showSuccessDialog = event.showDialog)
+            }
+
             is AuthEvent.UpdateEmailField -> {
                 mAuthState.value = mAuthState.value.copy(email = event.text)
             }
@@ -242,7 +246,8 @@ class AuthViewModel @Inject constructor(
                 val otpCode = generateOTP()
                 mAuthState.value = mAuthState.value.copy(generatedOTPCode = otpCode)
                 val otpMessage = "Your OTP code is $otpCode"
-                sendOTPMessage(fullPhoneNumber,"+12513136756",otpMessage)
+                Log.e("OTP" , "otp code : $otpCode")
+//                sendOTPMessage(fullPhoneNumber,"+12513136756",otpMessage)
             }
 
             is AuthEvent.VerifyOTPCode -> {

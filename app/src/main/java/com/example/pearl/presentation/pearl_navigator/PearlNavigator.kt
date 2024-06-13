@@ -88,7 +88,6 @@ fun PearlNavigator(
     pearlNavState: PearlNavState,
     pearlNavEvent : PearlNavEventFunction
 ){
-
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -238,7 +237,10 @@ fun PearlNavigator(
             },
             bottomBar = {
                 if(pearlNavState.showBottomNav){
-                    PearlBottomNavigation(navMenuItems = navigationItems, selected = pearlNavState.currentBottomNavItemIndex) {
+                    PearlBottomNavigation(
+                        navMenuItems = navigationItems,
+                        selected = pearlNavState.currentBottomNavItemIndex
+                    ){
                         pearlNavEvent(PearlNavigatorEvents.UpdateBottomNavItemIndex(it))
 
                         val route = getBottomNavigationScreenRouteByIndex(it)
@@ -246,7 +248,7 @@ fun PearlNavigator(
                         pearlNavEvent(PearlNavigatorEvents.NavigateTo(route , navController))
                     }
                 }
-            }
+            },
         ){ paddingValues ->
 
             BackHandler {

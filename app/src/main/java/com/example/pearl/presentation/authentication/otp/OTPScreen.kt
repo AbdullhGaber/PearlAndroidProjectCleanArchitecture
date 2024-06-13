@@ -1,6 +1,7 @@
 package com.example.pearl.presentation.authentication.otp
 
 
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,7 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.request.ImageRequest
+import coil.size.Size
 import com.example.newsapp.presentation.Dimens
 import com.example.pearl.R
 import com.example.pearl.presentation.authentication.AuthEvent
@@ -29,6 +37,7 @@ import com.example.pearl.presentation.common.CloseIconButton
 import com.example.pearl.presentation.authentication.components.OTPTextField
 import com.example.pearl.presentation.util.ErrorDialog
 import com.example.pearl.presentation.util.LoadingDialog
+import com.example.pearl.presentation.util.PrimaryDialog
 
 @Composable
 fun OTPScreen(
@@ -38,6 +47,39 @@ fun OTPScreen(
     navigateToQuizScreen : () -> Unit,
     navigateUp : () -> Unit
 ){
+    if(authState.showSuccessDialog){
+        val imageLoader = ImageLoader.Builder(LocalContext.current)
+            .components {
+                if ( Build.VERSION.SDK_INT >= 28 ) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }.build()
+
+        PrimaryDialog(
+            icon = {
+                Box(Modifier.fillMaxWidth()){
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(R.drawable.success_gif)  // Replace with your drawable GIF resource
+                            .size(Size.ORIGINAL)  // Use the original size of the GIF
+                            .build(),
+                        imageLoader = imageLoader,
+                        contentDescription = "Your GIF",
+                        modifier = Modifier.size(150.dp).align(Alignment.Center)
+                    )
+                }
+            },
+            title = "Welcome To Pearl !",
+            message = "Your account has been created successfully,\nthe first step of your healthy skin journey",
+            onDismiss = {
+                authEvent(AuthEvent.UpdateShowSuccessDialog(false))
+                navigateToQuizScreen()
+            }
+        )
+    }
+
     if(authState.error != null){
         ErrorDialog(
             title = authState.error,
@@ -162,7 +204,7 @@ fun OTPScreen(
                 authEvent(AuthEvent.VerifyOTPCode(
                     onSuccess = {
                         authEvent(AuthEvent.SignUp)
-                        navigateToQuizScreen()
+                        authEvent(AuthEvent.UpdateShowSuccessDialog(true))
                     },
                     onFailure = {
                         authEvent(AuthEvent.UpdateError(Exception("OTP code is not correct !")))

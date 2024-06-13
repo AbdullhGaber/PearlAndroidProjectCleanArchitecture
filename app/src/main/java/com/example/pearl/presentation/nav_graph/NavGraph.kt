@@ -20,6 +20,7 @@ import com.example.pearl.presentation.authentication.sign_in.SignInScreen
 import com.example.pearl.presentation.authentication.sign_up.SignUpScreen
 import com.example.pearl.presentation.introduction.IntroductionScreen
 import com.example.pearl.presentation.onboarding.OnBoardingScreen
+import com.example.pearl.presentation.onboarding.OnBoardingViewModel
 import com.example.pearl.presentation.pearl_navigator.NavigatorViewModel
 import com.example.pearl.presentation.pearl_navigator.PearlNavigator
 import com.example.pearl.presentation.privacy_policy.PrivacyPolicy
@@ -32,6 +33,7 @@ fun NavGraph(
 ){
     val navController  = rememberNavController()
     val authViewModel : AuthViewModel = hiltViewModel()
+    val onBoardingViewModel : OnBoardingViewModel = hiltViewModel()
 
     NavHost(navController = navController , startDestination = startDestination){
         navigation(
@@ -53,7 +55,8 @@ fun NavGraph(
                 OnBoardingScreen(
                     navigateToAuthScreen = {
                         navigateToTab(navController = navController , Route.AuthNavigation.route)
-                    }
+                    },
+                    onBoardingEvent = onBoardingViewModel::onEvent
                 )
             }
         }
@@ -182,7 +185,7 @@ fun NavGraph(
                 quizScreenState = questionViewModel.quizScreenState.value,
                 questionEvent = questionViewModel::onEvent,
                 navigateToHome = {
-                    navigateToTab(navController , Route.HomeScreen.route)
+                    navigateToTab(navController , Route.PearlNavigation.route)
                 }
             )
         }

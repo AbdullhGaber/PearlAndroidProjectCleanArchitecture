@@ -39,6 +39,7 @@ sealed class AuthEvent{
     data class UpdateIsLoading(val isLoading : Boolean) : AuthEvent()
     data class SendOTPMessage(val context: Context) : AuthEvent()
     data class VerifyOTPCode(val onSuccess : () -> Unit , val onFailure : () -> Unit) : AuthEvent()
+    data class UpdateShowSuccessDialog(val showDialog : Boolean) : AuthEvent()
     data class SaveOTPCode(val otp : String) : AuthEvent()
     object SignOut : AuthEvent()
 }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardingScreen(
+    onBoardingEvent: (OnBoardingEvent) -> Unit,
     navigateToAuthScreen: () -> Unit
 ){
     val lightBackground = R.drawable.bg_on_boarding_1_2
@@ -86,6 +87,7 @@ fun OnBoardingScreen(
                   LastOnBoardingPageButton(onClick = {
                       scope.launch {
                           navigateToAuthScreen()
+                          onBoardingEvent(OnBoardingEvent.SaveAppEntry)
                       }
                   })
               }
@@ -115,5 +117,5 @@ fun OnBoardingScreen(
 @Composable
 @Preview
 fun OnBoardingScreenPreview(){
-    OnBoardingScreen({})
+    OnBoardingScreen({} , {})
 }

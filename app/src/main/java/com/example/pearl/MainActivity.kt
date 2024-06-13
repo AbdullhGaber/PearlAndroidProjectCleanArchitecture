@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.core.app.ActivityCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pearl.presentation.nav_graph.NavGraph
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.ui.theme.PearlTheme
@@ -19,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val mViewModel by viewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         askForSmsPermission()
@@ -29,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(colorResource(id = R.color.primary_background))
                 ){
-                    NavGraph(startDestination = Route.AuthNavigation.route)
+                    NavGraph(startDestination = mViewModel.startDestination)
                 }
             }
         }

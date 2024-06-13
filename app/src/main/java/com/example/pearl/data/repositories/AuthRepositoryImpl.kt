@@ -7,6 +7,7 @@ import com.example.pearl.domain.model.User
 import com.example.pearl.domain.model.UserAddress
 import com.example.pearl.domain.model.UserGender
 import com.example.pearl.domain.repositories.AuthRepository
+import com.example.pearl.util.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
@@ -103,6 +104,6 @@ class AuthRepositoryImpl(
     private fun setUserDataIntoDB(
         user : User,
     ){
-        mDatabase.getReference("user").push().setValue(user)
+        mDatabase.getReference(Constants.USER_REFERENCE).child(user.uid).setValue(user)
     }
 }

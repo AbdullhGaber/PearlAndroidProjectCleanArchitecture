@@ -9,6 +9,7 @@ sealed class QuestionEvent{
         val currentProgress : Float
     ) : QuestionEvent()
 
+    object SaveAnswers : QuestionEvent()
     data class CheckAnswer(val answer : String) : QuestionEvent()
     data class CheckAnotherAnswer(val answer: String) : QuestionEvent()
     object UncheckAnswer : QuestionEvent()

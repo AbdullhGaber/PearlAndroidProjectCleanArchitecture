@@ -204,6 +204,7 @@ fun QuizScreen(
                        SecondaryButton(
                            text = "Skip",
                            onClick = {
+                               questionEvent(QuestionEvent.SaveAnswers)
                                navigateToHome()
                            },
                            modifier = Modifier.fillMaxWidth()
@@ -255,7 +256,10 @@ fun QuizScreen(
 
                        SecondaryButton(
                            text = "Skip",
-                           onClick = {navigateToHome() },
+                           onClick = {
+                               navigateToHome()
+                               questionEvent(QuestionEvent.SaveAnswers)
+                           },
                            modifier = Modifier.fillMaxWidth()
                        )
                    }
@@ -290,7 +294,10 @@ fun QuizScreen(
 
                        SecondaryButton(
                            text = "Skip",
-                           onClick = {navigateToHome() },
+                           onClick = {
+                               navigateToHome()
+                               questionEvent(QuestionEvent.SaveAnswers)
+                           },
                            modifier = Modifier.fillMaxWidth()
                        )
                    }
@@ -307,6 +314,7 @@ fun QuizScreen(
                        text = "Let's get started",
                        onClick = {
                            navigateToHome()
+                           questionEvent(QuestionEvent.SaveAnswers)
                        },
                        modifier = Modifier.fillMaxWidth()
                    )

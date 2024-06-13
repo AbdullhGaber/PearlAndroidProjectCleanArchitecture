@@ -2,21 +2,32 @@ package com.example.pearl.presentation.skin_quiz
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.pearl.domain.usecases.quiz.QuizUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class QuestionViewModel : ViewModel(){
+@HiltViewModel
+class QuestionViewModel @Inject constructor(
+    val quizUseCases: QuizUseCases
+) : ViewModel(){
     val quizScreenState = mutableStateOf(QuizScreenState())
-    private val mAnswersList = MutableList(18){""}
+    private val mAnswersTracker = MutableList(18){""}
+    private val mQuestionAnswersMap : MutableMap<String , String> = mutableMapOf()
 
     fun onEvent(event : QuestionEvent){
         when(event){
             is QuestionEvent.NextQuestion -> {
-
                 if(quizScreenState.value.currentQuestionIndex != questions.lastIndex){
-                    //store answer in answers list
-                    mAnswersList[quizScreenState.value.currentQuestionIndex] = event.answer
 
-                    //store answer in local storage
+                    if(questions[quizScreenState.value.currentQuestionIndex].questionText.isNotBlank()){
+                        //store answer in answers list
+                        mAnswersTracker[quizScreenState.value.currentQuestionIndex] = event.answer
+
+                        //store answer in map
+                        mQuestionAnswersMap[questions[quizScreenState.value.currentQuestionIndex].questionText] = event.answer
+                    }
 
                     //update question index
                     quizScreenState.value = quizScreenState.value.copy(currentQuestionIndex = event.currentQuestionIndex + 1)
@@ -106,6 +117,12 @@ class QuestionViewModel : ViewModel(){
                 }
             }
 
+            is QuestionEvent.SaveAnswers -> {
+                viewModelScope.launch {
+                    saveAnswersInDB()
+                }
+            }
+
             is QuestionEvent.PreviousQuestion -> {
                 if(quizScreenState.value.currentQuestionIndex > 0){
                     val currentIndex = quizScreenState.value.currentQuestionIndex
@@ -130,7 +147,7 @@ class QuestionViewModel : ViewModel(){
 
                     quizScreenState.value = quizScreenState.value.copy(
                         currentQuestionIndex =  prevQuestionIndex,
-                        chosenAnswer =  mAnswersList[prevQuestionIndex],
+                        chosenAnswer =  mAnswersTracker[prevQuestionIndex],
                         isAnswerChosen = true,
                         progressPercentage = if(progress > 0.0f) progress - progressMinus else 1.0f,
                         currentStep = if(progress == 0f) currentStep - 1 else currentStep,
@@ -139,5 +156,9 @@ class QuestionViewModel : ViewModel(){
                 }
             }
         }
+    }
+
+    private suspend fun saveAnswersInDB() {
+        quizUseCases.saveAnswersUseCase(mQuestionAnswersMap)
     }
 }

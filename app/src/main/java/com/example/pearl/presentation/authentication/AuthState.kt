@@ -28,4 +28,5 @@ data class AuthState(
     val ageErrorMessage : String? = null,
     val addressesErrorMessage : String? = null,
     val timeInSeconds : Int = 10,
+    val showSuccessDialog : Boolean = false
 )

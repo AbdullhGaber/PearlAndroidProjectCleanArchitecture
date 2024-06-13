@@ -54,7 +54,6 @@ fun QuestionScreen(
                     }
 
                     questionEvent(QuestionEvent.CheckAnswer(ans))
-
                 }
             }
         }
@@ -64,5 +63,5 @@ fun QuestionScreen(
 @Composable
 @Preview
 fun PreviewQuestionScreen(){
-//    QuestionScreen(questions[0]){}
+    QuestionScreen(questions[0] , QuizScreenState()){}
 }

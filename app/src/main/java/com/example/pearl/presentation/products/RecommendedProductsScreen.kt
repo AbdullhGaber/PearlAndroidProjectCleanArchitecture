@@ -133,7 +133,7 @@ fun RecommendedProductsScreen(
                 Spacer(modifier = Modifier.height(MediumPadding1))
 
                 LazyRow(Modifier.fillMaxWidth()){
-                    val products = featuredProducts.filter { it.type == productType}
+                    val products = featuredProducts.filter { it.productType == productType}
                     items(3){
                         if(products.size >= 3)
                            FeaturedProductCard(

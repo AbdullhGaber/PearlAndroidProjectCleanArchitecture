@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens
 import com.example.newsapp.presentation.Dimens.MediumPadding1
+import com.example.pearl.domain.model.Product
 import com.example.pearl.presentation.common.FeaturedProductCard
+import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.products.ProductType
 import com.example.pearl.presentation.products.featuredProducts
@@ -35,7 +37,8 @@ import com.example.pearl.presentation.products.productTypes
 @Composable
 fun RoutineProductsModalSheet(
     onDismissRequest : () -> Unit,
-    navigateToProductDetailsScreen : (String) -> Unit
+    navigateToProductDetailsScreen : (String) -> Unit,
+    onAddToRouteButtonClick : (Product) -> Unit = {}
 ){
     val modalSheetState = rememberModalBottomSheetState()
 
@@ -64,11 +67,14 @@ fun RoutineProductsModalSheet(
             state = state,
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             content = {
-                items(featuredProducts.size) {
-                    FeaturedProductCard(
-                        featuredProduct = featuredProducts[it],
+                items(recommendedProducts.size) {
+                    RecommendedProductCard(
+                        recommendedProduct = recommendedProducts[it],
                         onCardClick = {
-                            navigateToProductDetailsScreen(featuredProducts[it].name)
+                            navigateToProductDetailsScreen(recommendedProducts[it].name)
+                        },
+                        onAddToRouteButtonClick = {
+                            onAddToRouteButtonClick(it)
                         }
                     )
                 }

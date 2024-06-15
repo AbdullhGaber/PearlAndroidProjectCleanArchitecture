@@ -18,10 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.pearl.R
+import com.example.pearl.domain.model.Routine
 
 @Composable
 fun AddRoutineSection(
     onAddClick : () -> Unit ,
+    routine : Routine? = null,
     onDeleteClick : () -> Unit
 ){
     Box(modifier = Modifier.fillMaxWidth().background(Color.White)){
@@ -47,7 +49,9 @@ fun AddRoutineSection(
                     .clickable {  }
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.plus_add_icon),
+                        painter = painterResource(
+                            id = routine?.product?.image ?: R.drawable.plus_add_icon
+                        ),
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.Center).clickable { onAddClick() }
                     )
@@ -56,18 +60,13 @@ fun AddRoutineSection(
                 Spacer(modifier = Modifier.width(ExtraSmallPadding2))
 
                 Text(
-                    text = "Add a product",
+                    text = routine?.product?.description ?: "Add a product",
                     fontSize = 10.sp,
                     fontWeight = FontWeight(500),
                     color = Color(0xFF7F7F7F),
                     modifier = Modifier.clickable { onAddClick() }
                 )
             }
-
-            Image(
-                painter = painterResource(id = R.drawable.three_dots),
-                contentDescription = null,
-            )
         }
     }
 }

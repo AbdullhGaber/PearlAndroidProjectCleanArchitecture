@@ -22,13 +22,14 @@ import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.R
+import com.example.pearl.domain.model.Product
 import com.example.pearl.presentation.common.FeaturedProductCard
 import com.example.pearl.presentation.common.SearchBar
 
 @Composable
 fun AllProductCategoryScreen(
     productType: ProductType,
-    products : List<FeaturedProduct>,
+    products : List<Product>,
     navigateToProductDetailsScreen : (String) -> Unit
 ) {
     Box(

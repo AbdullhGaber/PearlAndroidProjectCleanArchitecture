@@ -58,7 +58,6 @@ import com.example.pearl.presentation.home.doctors
 import com.example.pearl.presentation.home.sideMenuItems
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.nav_graph.bottomNavRoutes
-import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
 import com.example.pearl.presentation.notification.NotificationScreen
 import com.example.pearl.presentation.products.AllProductCategoryScreen
 import com.example.pearl.presentation.products.AllRecommendedProductCategoryScreen
@@ -308,7 +307,7 @@ fun PearlNavigator(
                 composable(Route.AllProductCategoryScreen.route+"/{productTypeName}"){
                      val productTypeName = it.arguments?.getString("productTypeName")
                      val productType = getProductTypeFromString(productTypeName!!)
-                     val products = featuredProducts.filter { it.type == productType }
+                     val products = featuredProducts.filter { it.productType == productType }
                      AllProductCategoryScreen(
                          productType = productType,
                          products = products,
@@ -351,7 +350,7 @@ fun PearlNavigator(
                     val productType = getProductTypeFromString(argument!!)
                     AllRecommendedProductCategoryScreen(
                         productType = productType,
-                        products = featuredProducts.filter { it.type == productType},
+                        products = featuredProducts.filter { it.productType == productType},
                         navigateToProductDetailsScreen = { productName ->
                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
                         }
@@ -390,8 +389,6 @@ fun PearlNavigator(
                             navigateToScreen = {
                                 pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
                             },
-
-                            routineDetailsState = routineViewModel.mRoutineDetailsState.value,
                             routineEvents = routineViewModel::onEvent,
                         )
                     }
@@ -400,12 +397,13 @@ fun PearlNavigator(
                         RoutineDetailsScreen(
                             routineDetailsState = routineViewModel.mRoutineDetailsState.value,
                             routineEvents = routineViewModel::onEvent,
+
                             navigateToPrevious = {
                                 pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
                             },
 
-                            navigateToProductDetailsScreen = { productName ->
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
+                            navigateToScreen = { route ->
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route, navController))
                             }
                         )
                     }

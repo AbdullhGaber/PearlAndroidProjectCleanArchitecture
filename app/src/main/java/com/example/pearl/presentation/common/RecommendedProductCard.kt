@@ -22,14 +22,15 @@ import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.pearl.R
-import com.example.pearl.presentation.home.RecommendedProduct
+import com.example.pearl.domain.model.Product
 import com.example.pearl.presentation.home.components.ProductCardButton
 import com.example.pearl.presentation.home.recommendedProducts
 
 @Composable
 fun RecommendedProductCard(
-    recommendedProduct: RecommendedProduct,
-    onCardClick : () -> Unit
+    recommendedProduct: Product,
+    onCardClick : () -> Unit,
+    onAddToRouteButtonClick : (Product) -> Unit = {}
 ){
     Box(
         modifier = Modifier
@@ -37,9 +38,6 @@ fun RecommendedProductCard(
             .background(color = Color.White)
             .wrapContentSize()
             .padding(5.dp)
-            .clickable {
-                onCardClick()
-            }
     ){
         Column(
             Modifier.padding(5.dp),
@@ -57,7 +55,9 @@ fun RecommendedProductCard(
             Image(
                 painter = painterResource(id = recommendedProduct.image),
                 contentDescription = null,
-                modifier = Modifier.size(22.dp,74.dp)
+                modifier = Modifier.size(22.dp,74.dp).clickable {
+                    onCardClick()
+                }
             )
 
             Spacer(modifier = Modifier.height(ExtraSmallPadding2))
@@ -73,7 +73,7 @@ fun RecommendedProductCard(
             Spacer(modifier = Modifier.height(ExtraSmallPadding))
 
             Text(
-                text = recommendedProduct.type,
+                text = recommendedProduct.productType.name,
                 fontWeight = FontWeight(400),
                 fontSize = 6.sp,
                 color = Color(0xFF7F7F7F),
@@ -83,7 +83,12 @@ fun RecommendedProductCard(
 
             Spacer(modifier = Modifier.height(ExtraSmallPadding))
             
-            ProductCardButton(text = "Add To Routine", onClick = {})
+            ProductCardButton(
+                text = "Add To Routine",
+                onClick = {
+                    onAddToRouteButtonClick(recommendedProduct)
+                }
+            )
 
         }
     }

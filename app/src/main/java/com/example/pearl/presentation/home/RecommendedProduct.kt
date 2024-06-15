@@ -1,61 +1,67 @@
 package com.example.pearl.presentation.home
 
-import androidx.annotation.DrawableRes
-import com.example.pearl.R
 
-data class RecommendedProduct(
-    @DrawableRes val image : Int,
-    val name : String,
-    val type : String
-)
+import com.example.pearl.R
+import com.example.pearl.domain.model.Product
+import com.example.pearl.presentation.products.ProductType
+
 
 val recommendedProducts = listOf(
-    RecommendedProduct(
+    Product(
+        id = 1,
         image = R.drawable.vitamine_c,
         name = "Dr.Rashel Vitamin C Face Serum",
-        type = "Serum"
+        productType = ProductType.createSerum(),
+
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 2,
         image = R.drawable.bluebell,
         name = "BLUEBELL Malinda AHA/BHA Gel",
-        type = "Cleanser"
+        productType = ProductType.createCleanser()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 3,
         image = R.drawable.eucerin,
         name = "Eucerin Dermopurifyer Cleansing Gel",
-        type = "Cleanser"
+        productType = ProductType.createCleanser()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 4,
         image = R.drawable.care_and_more,
         name = "Care & More Soft cream with glycerin",
-        type = "Moisturizer"
+        productType = ProductType.createMoisturizer()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 5,
         image = R.drawable.vitamine_c,
         name = "Dr.Rashel Vitamin C Face Serum",
-        type = "Serum"
+        productType = ProductType.createSerum()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 6,
         image = R.drawable.bluebell,
         name = "BLUEBELL Malinda AHA/BHA Gel",
-        type = "Cleanser"
+        productType = ProductType.createCleanser()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 6,
         image = R.drawable.eucerin,
         name = "Eucerin Dermopurifyer Cleansing Gel",
-        type = "Cleanser"
+        productType = ProductType.createCleanser()
     ),
 
-    RecommendedProduct(
+    Product(
+        id = 7,
         image = R.drawable.care_and_more,
         name = "Care & More Soft cream with glycerin",
-        type = "Moisturizer"
+        productType = ProductType.createMoisturizer()
     ),
 )
 

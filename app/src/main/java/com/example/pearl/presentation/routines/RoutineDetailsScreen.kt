@@ -9,8 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,10 +24,19 @@ import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.R
+import com.example.pearl.domain.model.Routine
 import com.example.pearl.presentation.common.PearlSwitch
+import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.products.productTypes
 import com.example.pearl.presentation.routines.components.AddRoutineSection
 import com.example.pearl.presentation.routines.components.RoutineProductsModalSheet
+import com.example.pearl.presentation.util.ConfirmDeleteMessageDialog
+import com.example.pearl.presentation.util.ErrorDialog
+import com.example.pearl.presentation.util.PrimaryDialog
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 typealias RoutineEventFunction = (RoutineEvents) -> Unit
 @Composable
@@ -36,12 +44,50 @@ fun RoutineDetailsScreen(
     routineDetailsState: RoutineDetailsState,
     routineEvents: RoutineEventFunction,
     navigateToPrevious : () -> Unit,
-    navigateToProductDetailsScreen : (String) -> Unit
+    navigateToScreen : (String) -> Unit
 ){
-    val isSheetShown = remember {
-        mutableStateOf(false)
+    if(routineDetailsState.isFailureDialogShown){
+        ErrorDialog(
+            title = routineDetailsState.errorMessage,
+            message ="Try again",
+            onDismiss = {
+                routineEvents(RoutineEvents.HideFailureDialog)
+            }
+        )
     }
-    
+
+    if(routineDetailsState.isDeleteConfirmDialogShown){
+        ConfirmDeleteMessageDialog(
+            onConfirm = {
+                routineEvents(RoutineEvents.RemoveRoutine(routineDetailsState.routineIdToDelete))
+            },
+            onDismiss = {
+                routineEvents(RoutineEvents.HideConfirmDeleteDialog)
+            },
+
+            message = "Are you sure you want to remove this product from your routine?"
+        )
+    }
+
+    if(routineDetailsState.isSuccessDialogShown){
+        PrimaryDialog(
+            icon = {
+                 Box(Modifier.fillMaxWidth()){
+                     Image(
+                         painter = painterResource(id = R.drawable.done_successfully),
+                         contentDescription = null,
+                         modifier = Modifier.align(Alignment.Center)
+                     )
+                 }
+            },
+            title = "Product has been added to your routine",
+            message = "Don't miss to read the instructions and how to use the product.",
+            onDismiss = {
+                routineEvents(RoutineEvents.HideSuccessDialog)
+            }
+        )
+    }
+
     Box(modifier = Modifier.fillMaxSize()){
         Box(modifier = Modifier.fillMaxSize() ){
             Image(
@@ -53,7 +99,11 @@ fun RoutineDetailsScreen(
         }
         
         Column{
-            Row(Modifier.fillMaxWidth().padding(20.dp).fillMaxWidth()) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .fillMaxWidth()) {
                 Box(modifier = Modifier.fillMaxWidth()){
                     Image(
                         painter = painterResource(id = R.drawable.arrow_back),
@@ -87,7 +137,10 @@ fun RoutineDetailsScreen(
                         .size(24.dp)
                         .clickable {
                             routineEvents(
-                                RoutineEvents.SwitchRoutineTime(routineDetailsState.startPosRoutineTime , RoutineTimePositions.START)
+                                RoutineEvents.SwitchRoutineTime(
+                                    routineDetailsState.startPosRoutineTime,
+                                    RoutineTimePositions.START
+                                )
                             )
                         }
                 )
@@ -119,7 +172,10 @@ fun RoutineDetailsScreen(
                         .size(24.dp)
                         .clickable {
                             routineEvents(
-                                RoutineEvents.SwitchRoutineTime(routineDetailsState.endPosRoutineTime,RoutineTimePositions.END)
+                                RoutineEvents.SwitchRoutineTime(
+                                    routineDetailsState.endPosRoutineTime,
+                                    RoutineTimePositions.END
+                                )
                             )
                         }
                 )
@@ -138,6 +194,13 @@ fun RoutineDetailsScreen(
             ){
                 Column(Modifier.padding(MediumPadding1)) {
                     for (productType in productTypes ){
+                        val routines = routineDetailsState.routines
+
+                        val routine = routines.singleOrNull{
+                            it.product.productType.name == productType.name
+                                    && it.time == getRoutineTimeByString(routineDetailsState.centerPosRoutineTime.title)
+                        }
+
                         Text(
                             text = productType.name,
                             fontSize = 12.sp,
@@ -147,15 +210,21 @@ fun RoutineDetailsScreen(
 
                         Spacer(modifier = Modifier.height(ExtraSmallPadding))
 
-
                         AddRoutineSection(
                             onAddClick = {
-                                isSheetShown.value = true
+                                if(routine == null){
+                                    routineEvents(RoutineEvents.ShowBottomSheet)
+                                }
                             },
 
                             onDeleteClick = {
+                                if(routine != null){
+                                    routineEvents(RoutineEvents.ShowConfirmDeleteDialog)
+                                    routineEvents(RoutineEvents.SelectRoutineID(routine.id))
+                                }
+                            },
 
-                            }
+                            routine = routine
                         )
 
                         Spacer(modifier = Modifier.height(MediumPadding1))
@@ -176,11 +245,20 @@ fun RoutineDetailsScreen(
 
                        PearlSwitch()
 
-                        if(isSheetShown.value){
+                        if(routineDetailsState.isSheetShown){
                             RoutineProductsModalSheet(
-                                onDismissRequest = {isSheetShown.value = false},
-                                navigateToProductDetailsScreen = {
-                                    navigateToProductDetailsScreen(it)
+                                onDismissRequest = {
+                                    routineEvents(RoutineEvents.HideBottomSheet)
+                                    routineEvents(RoutineEvents.ObserveRoutineList)
+                                },
+                                navigateToProductDetailsScreen = { productName ->
+                                    navigateToScreen("${Route.ProductDetailsScreen.route}/$productName")
+                                },
+                                onAddToRouteButtonClick = {
+                                    routineEvents(RoutineEvents.AddProductToRoutine(
+                                        it,
+                                        routineDetailsState.centerPosRoutineTime.title
+                                    ))
                                 }
                             )
                         }
@@ -188,12 +266,11 @@ fun RoutineDetailsScreen(
                 }
             }
         }
-
     }
 }
 
 @Composable
 @Preview
 fun RoutineDetailsScreenPreview(){
-//    RoutineDetailsScreen()
+    RoutineDetailsScreen(RoutineDetailsState() ,{} , {} , {})
 }

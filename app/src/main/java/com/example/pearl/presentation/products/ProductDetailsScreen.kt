@@ -23,6 +23,7 @@ import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.newsapp.presentation.Dimens.MediumPadding1
 import com.example.pearl.R
+import com.example.pearl.domain.model.Product
 import com.example.pearl.presentation.common.FeaturedProductCard
 import com.example.pearl.presentation.common.HomeButton
 import com.example.pearl.presentation.products.components.CollapsingDropdownMenu
@@ -30,7 +31,7 @@ import com.example.pearl.presentation.products.components.CollapsingDropdownMenu
 
 @Composable
 fun ProductDetailsScreen(
-    product: FeaturedProduct,
+    product: Product,
     navigateToProductDetailsScreen : (String) -> Unit,
     navigateToPrevious : () -> Unit
 ){
@@ -149,7 +150,7 @@ fun ProductDetailsScreen(
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            LazyRow(Modifier.fillMaxWidth()){
-               val products = featuredProducts.filter { it.type == ProductType.Moisturizer }
+               val products = featuredProducts.filter { it.productType.name == ProductType.MOISTURIZER }
                items(3){
                    FeaturedProductCard(
                        featuredProduct = products[it] ,

@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
 import com.example.pearl.R
-import com.example.pearl.presentation.products.FeaturedProduct
+import com.example.pearl.domain.model.Product
 import com.example.pearl.presentation.products.featuredProducts
 
 @Composable
 fun FeaturedProductCard(
-    featuredProduct: FeaturedProduct,
+    featuredProduct: Product,
     onCardClick : () -> Unit
 ){
     Box(

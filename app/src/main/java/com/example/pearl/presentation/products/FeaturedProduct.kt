@@ -1,114 +1,121 @@
 package com.example.pearl.presentation.products
 
-import androidx.annotation.DrawableRes
-import com.example.pearl.R
 
-data class FeaturedProduct(
-    @DrawableRes val image : Int,
-    val name : String ,
-    val type : ProductType,
-    val description : String,
-    val isFavorite : Boolean = false
-)
+import com.example.pearl.R
+import com.example.pearl.domain.model.Product
+
 
 val featuredProducts = listOf(
 
-    FeaturedProduct(
+    Product(
+        id = 1,
         image = R.drawable.ciel_cleanser,
         name = "CIEL",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Vitamin C Face Serum",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 2,
         image = R.drawable.cera_ve_cleanser,
         name = "CeraVe",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Cleanser for Oily, Combined and Acne Prone Skin",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 3,
         image = R.drawable.eucerin,
         name = "Eucerin",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Dermopurifyer Cleansing Gel",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 4,
         image = R.drawable.bluebell,
         name = "BLUEBELL Malinda",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Gel AHA / BHA Cleanser"
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 5,
         image = R.drawable.shaan_gel_cleanser,
         name = "Shaan 1",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Facial cleanser antioxidant"
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 6,
         image = R.drawable.starville_cleanser,
         name = "Starville",
-        type = ProductType.Cleanser,
+        productType = ProductType.createCleanser(),
         description = "Acne prone skin cleanser"
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 7,
         image = R.drawable.shaan_moisturizer,
         name = "Shaan 2",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Soothing Gel with vitamin E",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 8,
         image = R.drawable.shaan_moisturizer,
         name = "Shaan 3",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Soothing Gel with vitamin E",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 9,
         image = R.drawable.hayah_moisturizer,
         name = "HAYAH",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Sebaclar hydra acne cream"
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 10,
         image = R.drawable.hayah_moisturizer,
         name = "Cleo",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Ultra Rich Moisturizer",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 11,
         image = R.drawable.stives_moisturizer,
         name = "Stives",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Facial moisturizer with Collagen & Elastin",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 12,
         image = R.drawable.cera_ve_moisturizer,
         name = "Stives",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Moisturising Lotion SPF25",
         isFavorite = true
     ),
 
-    FeaturedProduct(
+    Product(
+        id = 13,
         image = R.drawable.shaan_moisturizer,
         name = "Shaan 4",
-        type = ProductType.Moisturizer,
+        productType = ProductType.createMoisturizer(),
         description = "Soothing Gel with vitamin E"
     ),
 )

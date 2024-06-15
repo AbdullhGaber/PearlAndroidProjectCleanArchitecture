@@ -25,7 +25,6 @@ import com.example.pearl.presentation.routines.components.RoutineBox
 fun RoutineScreen(
     navigateToPreviousTab : () -> Unit,
     navigateToScreen : (String) -> Unit,
-    routineDetailsState: RoutineDetailsState,
     routineEvents: RoutineEventFunction
 ){
     val scrollState = rememberScrollState()

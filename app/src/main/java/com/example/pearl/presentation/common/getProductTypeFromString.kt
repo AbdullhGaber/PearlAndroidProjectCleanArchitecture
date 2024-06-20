@@ -4,14 +4,14 @@ import com.example.pearl.presentation.products.ProductType
 
 fun getProductTypeFromString(productTypeName: String): ProductType {
     return when (productTypeName) {
-        "Cleanser" -> ProductType.createCleanser()
-        "Moisturizer" -> ProductType.createMoisturizer()
-        "Serum" -> ProductType.createSerum()
-        "Toner" -> ProductType.createToner()
-        "Sun Screen" -> ProductType.createSunScreen()
-        "Sheet Mask" -> ProductType.createSheetMask()
-        "Eye Care" -> ProductType.createEyeCare()
-        "Lip Care" -> ProductType.createLipCare()
+        ProductType.CLEANSER -> ProductType.createCleanser()
+        ProductType.MOISTURIZER -> ProductType.createMoisturizer()
+        ProductType.SERUM -> ProductType.createSerum()
+        ProductType.TONER -> ProductType.createToner()
+        ProductType.SUN_SCREEN -> ProductType.createSunScreen()
+        ProductType.SHEET_MASK -> ProductType.createSheetMask()
+        ProductType.EYE_CARE -> ProductType.createEyeCare()
+        ProductType.LIP_CARE -> ProductType.createLipCare()
         else -> throw IllegalArgumentException("Unknown product type: $productTypeName")
     }
 }

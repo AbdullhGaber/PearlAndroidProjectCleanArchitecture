@@ -6,14 +6,12 @@ import com.example.pearl.domain.model.Product
 
 
 val featuredProducts = listOf(
-
     Product(
         id = 1,
         image = R.drawable.ciel_cleanser,
         name = "CIEL",
         productType = ProductType.createCleanser(),
         description = "Vitamin C Face Serum",
-        isFavorite = true
     ),
 
     Product(
@@ -22,7 +20,6 @@ val featuredProducts = listOf(
         name = "CeraVe",
         productType = ProductType.createCleanser(),
         description = "Cleanser for Oily, Combined and Acne Prone Skin",
-        isFavorite = true
     ),
 
     Product(
@@ -31,7 +28,6 @@ val featuredProducts = listOf(
         name = "Eucerin",
         productType = ProductType.createCleanser(),
         description = "Dermopurifyer Cleansing Gel",
-        isFavorite = true
     ),
 
     Product(
@@ -64,7 +60,6 @@ val featuredProducts = listOf(
         name = "Shaan 2",
         productType = ProductType.createMoisturizer(),
         description = "Soothing Gel with vitamin E",
-        isFavorite = true
     ),
 
     Product(
@@ -73,7 +68,6 @@ val featuredProducts = listOf(
         name = "Shaan 3",
         productType = ProductType.createMoisturizer(),
         description = "Soothing Gel with vitamin E",
-        isFavorite = true
     ),
 
     Product(
@@ -90,7 +84,6 @@ val featuredProducts = listOf(
         name = "Cleo",
         productType = ProductType.createMoisturizer(),
         description = "Ultra Rich Moisturizer",
-        isFavorite = true
     ),
 
     Product(
@@ -99,7 +92,6 @@ val featuredProducts = listOf(
         name = "Stives",
         productType = ProductType.createMoisturizer(),
         description = "Facial moisturizer with Collagen & Elastin",
-        isFavorite = true
     ),
 
     Product(
@@ -108,7 +100,6 @@ val featuredProducts = listOf(
         name = "Stives",
         productType = ProductType.createMoisturizer(),
         description = "Moisturising Lotion SPF25",
-        isFavorite = true
     ),
 
     Product(

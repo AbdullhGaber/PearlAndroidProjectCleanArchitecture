@@ -1,15 +1,22 @@
-package com.example.pearl.presentation.home
+package com.example.pearl.domain.model
 
 import androidx.annotation.DrawableRes
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.pearl.R
-
+@Entity
 data class Doctor(
-    @DrawableRes val image : Int,
-    val name : String,
-    val location : String,
-    val rate : String,
-    val experience : String,
-    val description : String = ""
+    @PrimaryKey
+    val id : Int = -1,
+    val name : String = "",
+    @DrawableRes
+    val image : Int = 0,
+    val location : String = "",
+    val rate : String = "",
+    val experience : Int = 0,
+    val description : String = "",
+    val reviewsNo: Int = 0,
+    var isFavorite : Boolean = false
 )
 
 val doctors = listOf(
@@ -18,7 +25,7 @@ val doctors = listOf(
         name = "Dr. Mariam Zahran",
         location = "El-Mansoura",
         rate = "4.8",
-        experience = "7 years",
+        experience = 7,
         description = "Dr. Mariam, an accomplished dermatologist rs of specialized experience, excels in diagnosing"
     ),
 
@@ -27,7 +34,7 @@ val doctors = listOf(
         name = "Dr. Nadia Emara",
         location = "El-Mansoura",
         rate = "4.7",
-        experience = "13 years"
+        experience = 13
     ),
 
     Doctor(
@@ -35,7 +42,7 @@ val doctors = listOf(
         name = "Dr. Ahmed Khaled",
         location = "El-Mansoura",
         rate = "4.7",
-        experience = "8 years"
+        experience = 8
     ),
 
     Doctor(
@@ -43,6 +50,6 @@ val doctors = listOf(
         name = "Dr. Salma Karam",
         location = "El-Mansoura",
         rate = "4.5",
-        experience = "5 years"
+        experience = 5
     ),
 )

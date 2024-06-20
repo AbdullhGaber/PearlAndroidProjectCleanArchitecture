@@ -26,8 +26,8 @@ import com.example.pearl.presentation.common.HorizontalLine
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.dermatologists.components.ReviewComment
 import com.example.pearl.presentation.dermatologists.components.ReviewTextField
-import com.example.pearl.presentation.home.Doctor
-import com.example.pearl.presentation.home.doctors
+import com.example.pearl.domain.model.Doctor
+import com.example.pearl.domain.model.doctors
 
 @Composable
 fun DermatologistDetailsScreen(

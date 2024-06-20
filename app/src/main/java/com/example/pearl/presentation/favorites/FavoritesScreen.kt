@@ -24,26 +24,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.newsapp.presentation.Dimens
 import com.example.pearl.R
 import com.example.pearl.presentation.common.FeaturedProductCard
-import com.example.pearl.presentation.dermatologists.components.DermatologistCard
-import com.example.pearl.presentation.dermatologists.favoriteDermatologistsCardData
-import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
-import com.example.pearl.presentation.nav_graph.Route
-import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
-import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
-import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
-import com.example.pearl.presentation.products.featuredProducts
+import com.example.pearl.presentation.common.DermatologistCard
+import com.example.pearl.presentation.util.ErrorDialog
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FavoritesScreen(
+    favoriteScreenEvents: (FavoriteScreenEvents) -> Unit,
+    favoriteScreenState: FavoriteScreenState,
     navigateToPreviousTab : () -> Unit,
     navigateToScreen : (String) -> Unit
 ){
+    if(favoriteScreenState.isErrorShown){
+        ErrorDialog(
+            title = favoriteScreenState.error!!,
+            message = "Try again",
+            onDismiss = {
+                favoriteScreenEvents(FavoriteScreenEvents.HideErrorDialog)
+                favoriteScreenEvents(FavoriteScreenEvents.UpdateErrorMessage(null))
+            }
+        )
+    }
     Box(
         modifier = Modifier
             .background(Color.White)
@@ -60,7 +65,7 @@ fun FavoritesScreen(
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .clickable{
+                        .clickable {
                             navigateToPreviousTab()
                         },
                     contentScale = ContentScale.FillBounds
@@ -78,7 +83,7 @@ fun FavoritesScreen(
             Spacer(Modifier.height(24.dp))
 
             val tabItems = listOf("Products" , "Dermatologists")
-            var selectedIndex by remember{ mutableStateOf(0) }
+            var selectedIndex by remember{ mutableIntStateOf(0) }
 
             TabRow(selectedTabIndex = selectedIndex) {
                 tabItems.forEachIndexed{ index: Int, item: String ->
@@ -114,12 +119,15 @@ fun FavoritesScreen(
                             state = state,
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             content = {
-                                val favoriteProducts = featuredProducts.filter{it.isFavorite}
-                                items(favoriteProducts.size) {
+                                items(favoriteScreenState.favoriteProducts.size) {
                                     FeaturedProductCard(
-                                        featuredProduct = favoriteProducts[it],
+                                        featuredProduct = favoriteScreenState.favoriteProducts[it],
                                         onCardClick = {
-                                            navigateToScreen(favoriteProducts[it].name)
+                                            navigateToScreen(favoriteScreenState.favoriteProducts[it].name)
+                                        },
+                                        onFavoriteClick = { product ->
+                                            favoriteScreenEvents(FavoriteScreenEvents.ProductAction(product))
+                                            favoriteScreenEvents(FavoriteScreenEvents.ObserveFavoriteProductsList)
                                         }
                                     )
                                 }
@@ -131,12 +139,14 @@ fun FavoritesScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
                         ){
-                            items(favoriteDermatologistsCardData.size){
+                            items(favoriteScreenState.favoriteDoctors.size){
                                 DermatologistCard(
-                                    dermatologistCardData = favoriteDermatologistsCardData[it],
-                                    modifier = Modifier.padding(5.dp)
+                                    dermatologistCardData = favoriteScreenState.favoriteDoctors[it],
+                                    modifier = Modifier.padding(5.dp),
+                                    onFavoriteClick = {doctor ->
+                                        favoriteScreenEvents(FavoriteScreenEvents.DoctorAction(doctor))
+                                    }
                                 )
                             }
                         }
@@ -161,5 +171,5 @@ fun FavoritesScreen(
 @Composable
 @Preview
 fun PreviewFavoriteScreen(){
-//    FavoritesScreen()
+ FavoritesScreen({}, FavoriteScreenState(),{},{})
 }

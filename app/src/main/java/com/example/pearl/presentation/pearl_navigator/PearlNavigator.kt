@@ -54,7 +54,9 @@ import com.example.pearl.presentation.common.getDrawerNavigationScreenRouteByInd
 import com.example.pearl.presentation.common.getProductTypeFromString
 import com.example.pearl.presentation.dermatologists.DermatologistDetailsScreen
 import com.example.pearl.presentation.dermatologists.NearestDermatologistsScreen
-import com.example.pearl.presentation.home.doctors
+import com.example.pearl.domain.model.doctors
+import com.example.pearl.presentation.dermatologists.DermatologistViewModel
+import com.example.pearl.presentation.favorites.FavoritesViewModel
 import com.example.pearl.presentation.home.sideMenuItems
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.nav_graph.bottomNavRoutes
@@ -68,6 +70,7 @@ import com.example.pearl.presentation.nutrition_routine.NutritionRoutineScreen
 import com.example.pearl.presentation.payments.PaymentMethodScreen
 import com.example.pearl.presentation.payments.PaymentSuccessScreen
 import com.example.pearl.presentation.payments.ReviewSummaryScreen
+import com.example.pearl.presentation.products.ProductViewModel
 import com.example.pearl.presentation.profile.ProfileScreen
 import com.example.pearl.presentation.recipes.RecipesDetailsScreen
 import com.example.pearl.presentation.recipes.RecipesScreen
@@ -229,7 +232,10 @@ fun PearlNavigator(
 
                         Image(
                             painter = painterResource(id = R.drawable.ic_baseline_notifications_none_24),
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier.clickable {
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.NotificationScreen.route , navController))
+                            }
                         )
                     }
                 }
@@ -294,7 +300,10 @@ fun PearlNavigator(
                 }
 
                 composable(route = Route.ProductsScreen.route){
+                    val productViewModel : ProductViewModel = hiltViewModel()
                     ProductsScreen(
+                        productScreenState = productViewModel.productScreenState.value,
+                        productEvents = productViewModel::onEvent,
                         navigateToPreviousTab = {
                             pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(navController))
                         },
@@ -307,20 +316,27 @@ fun PearlNavigator(
                 composable(Route.AllProductCategoryScreen.route+"/{productTypeName}"){
                      val productTypeName = it.arguments?.getString("productTypeName")
                      val productType = getProductTypeFromString(productTypeName!!)
-                     val products = featuredProducts.filter { it.productType == productType }
+                    val productViewModel : ProductViewModel = hiltViewModel()
                      AllProductCategoryScreen(
+                         productEvent = productViewModel::onEvent,
+                         productsState = productViewModel.productScreenState.value,
                          productType = productType,
-                         products = products,
                          navigateToProductDetailsScreen = {
                              pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$it", navController))
+                         },
+                         navigateToPrevious = {
+                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
                          }
                      )
                 }
                 
                 composable(route = Route.ProductDetailsScreen.route+"/{productName}"){
+                    val productViewModel : ProductViewModel = hiltViewModel()
                     val productName = it.arguments?.getString("productName")
                     val product = (featuredProducts.single { product -> product.name == productName })
                     ProductDetailsScreen(
+                        productEvent = productViewModel::onEvent,
+                        productsState = productViewModel.productScreenState.value,
                         product = product ,
                         navigateToProductDetailsScreen = { name ->
                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$name", navController))
@@ -332,12 +348,15 @@ fun PearlNavigator(
                 }
 
                 composable(route = Route.RecommendedProductsScreen.route){
+                    val productViewModel : ProductViewModel = hiltViewModel()
                     RecommendedProductsScreen(
+                        productEvent = productViewModel::onEvent,
+                        productsState = productViewModel.productScreenState.value,
                         navigateToPreviousTab = {
                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
                         },
                         onProductTypeButtonClick = {productType ->
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.AllRecommendedProductCategoryScreen.route}/$productType", navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.AllRecommendedProductCategoryScreen.route}/${productType.name}", navController))
                         },
                         navigateToProductDetailsScreen = { productName ->
                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
@@ -346,19 +365,27 @@ fun PearlNavigator(
                 }
 
                 composable(route = Route.AllRecommendedProductCategoryScreen.route+"/{productType}"){
+                    val productViewModel : ProductViewModel = hiltViewModel()
                     val argument = it.arguments?.getString("productType")
                     val productType = getProductTypeFromString(argument!!)
                     AllRecommendedProductCategoryScreen(
+                        productEvent = productViewModel::onEvent,
+                        productsState = productViewModel.productScreenState.value,
                         productType = productType,
-                        products = featuredProducts.filter { it.productType == productType},
                         navigateToProductDetailsScreen = { productName ->
                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
+                        },
+                        navigateToPrevious = {
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
                         }
                     )
                 }
 
                 composable(route = Route.NearestDermatologistsScreen.route){
+                    val doctorViewModel : DermatologistViewModel = hiltViewModel()
                     NearestDermatologistsScreen(
+                        doctorEvents = doctorViewModel::onEvent,
+                        doctorScreenState = doctorViewModel.doctorScreenState.value,
                         navigateToPrevious = {
                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
                         }
@@ -539,7 +566,11 @@ fun PearlNavigator(
                 }
 
                 composable(route = Route.FavoritesScreen.route){
+                    val favoriteViewModel : FavoritesViewModel = hiltViewModel()
+
                     FavoritesScreen(
+                        favoriteScreenEvents = favoriteViewModel::onEvent,
+                        favoriteScreenState = favoriteViewModel.mFavoriteScreenState.value,
                         navigateToPreviousTab = {
                             pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
                         },

@@ -1,5 +1,6 @@
 package com.example.pearl.presentation.products
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import com.example.pearl.R
@@ -36,6 +37,8 @@ import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @Composable
 fun ProductsScreen(
+    productScreenState: ProductScreenState,
+    productEvents: (ProductEvents) -> Unit,
     navigateToPreviousTab: () -> Unit,
     navigateToScreen : (String) -> Unit
 ){
@@ -82,16 +85,16 @@ fun ProductsScreen(
             }
 
             LazyRow(Modifier.fillMaxWidth()){
-                items(productTypes.size){
+                items(productTypes.size){index ->
                     Column(
                         Modifier
                             .padding(MediumPadding1)
                             .clickable {
-                                navigateToScreen("${Route.AllProductCategoryScreen.route}/${productTypes[it]}")
+                                navigateToScreen("${Route.AllProductCategoryScreen.route}/${productTypes[index]}")
                             }
                     ){
                         Icon(
-                            painter = painterResource(id = productTypes[it].icon),
+                            painter = painterResource(id = productTypes[index].icon),
                             contentDescription = null,
                             modifier = Modifier.size(30.dp),
                         )
@@ -99,7 +102,7 @@ fun ProductsScreen(
                         Spacer(modifier = Modifier.height(ExtraSmallPadding2))
 
                         Text(
-                            text = productTypes[it].name,
+                            text = productTypes[index].name,
                             fontSize = 7.sp,
                             fontWeight = FontWeight(400),
                             color = Color(0xFF000000),
@@ -120,13 +123,20 @@ fun ProductsScreen(
             Spacer(modifier = Modifier.height(MediumPadding1))
 
             LazyRow(Modifier.fillMaxWidth()){
-                items(recommendedProducts.size){
-                    RecommendedProductCard(
-                        recommendedProduct = recommendedProducts[it],
+                items(productScreenState.products.size){index ->
+                    FeaturedProductCard(
+                        featuredProduct = productScreenState.products[index],
                         onCardClick = {
-                            navigateToScreen(Route.ProductDetailsScreen.route + "/${featuredProducts[it].name}")
+                            navigateToScreen(Route.ProductDetailsScreen.route + "/${featuredProducts[index].name}")
+                        },
+                        onFavoriteClick = {product ->
+                            Log.e("reco product favorite" , "before adding reco product.isFavorite = ${product.isFavorite}")
+                            productEvents(ProductEvents.AddRemoveFavoriteProduct(product))
+                            Log.e("reco product favorite" , "reco product.isFavorite = ${product.isFavorite}")
+                            productEvents(ProductEvents.ObserveOnProductList(productScreenState.products))
                         }
                     )
+                    Spacer(modifier = Modifier.width(5.dp))
                 }
             }
 
@@ -145,7 +155,7 @@ fun ProductsScreen(
                     HomeButton(
                         text = "see more",
                         onClick = {
-                            navigateToScreen(Route.AllProductCategoryScreen.route + "/${productType}")
+                            navigateToScreen(Route.AllProductCategoryScreen.route + "/${productType.name}")
                         }
                     )
                 }
@@ -153,15 +163,23 @@ fun ProductsScreen(
                 Spacer(modifier = Modifier.height(MediumPadding1))
 
                 LazyRow(Modifier.fillMaxWidth()){
-                    val products = featuredProducts.filter { it.productType == productType }
-                    items(3){
+                    val products = productScreenState.products.filter { it.productType == productType }
+                    items(3){index ->
                         if(products.size >= 3){
                             FeaturedProductCard(
-                                featuredProduct = products[it],
+                                modifier = Modifier.weight(1f),
+                                featuredProduct = products[index],
                                 onCardClick = {
-                                    navigateToScreen(Route.ProductDetailsScreen.route + "/${products[it].name}")
+                                    navigateToScreen(Route.ProductDetailsScreen.route + "/${products[index].name}")
+                                },
+                                onFavoriteClick = {product ->
+                                    Log.e("product favorite" , "before adding product.isFavorite = ${product.isFavorite}")
+                                    productEvents(ProductEvents.AddRemoveFavoriteProduct(product))
+                                    Log.e("product favorite" , "product.isFavorite = ${product.isFavorite}")
+                                    productEvents(ProductEvents.ObserveOnProductList(productScreenState.products))
                                 }
                             )
+                            Spacer(modifier = Modifier.width(5.dp))
                         }
                     }
                 }
@@ -175,5 +193,5 @@ fun ProductsScreen(
 @Composable
 @Preview
 fun ProductsScreenPreview(){
-//    ProductsScreen()
+    ProductsScreen(ProductScreenState(),{},{},{})
 }

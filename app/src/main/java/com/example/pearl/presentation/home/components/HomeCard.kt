@@ -28,11 +28,10 @@ import com.example.pearl.presentation.common.HomeButton
 import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.HomeScreenEvents
 import com.example.pearl.presentation.home.HomeScreenState
-import com.example.pearl.presentation.home.doctors
+import com.example.pearl.domain.model.doctors
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.home.routineCards
 import com.example.pearl.presentation.nav_graph.Route
-import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 import com.example.pearl.presentation.products.featuredProducts
 
 
@@ -180,8 +179,8 @@ fun HomeCard(
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            LazyRow(Modifier.fillMaxWidth()){
-               items(featuredProducts.size){
-                   RecommendedProductCard(
+               items(recommendedProducts.size){
+                   HomeProductsCard(
                        recommendedProduct = recommendedProducts[it] ,
                        onCardClick = {
                            navigateToScreen("${Route.ProductDetailsScreen.route}/${featuredProducts[it].name}")
@@ -223,5 +222,5 @@ fun HomeCard(
 @Composable
 @Preview
 fun HomeCardPreview(){
-//    HomeCard()
+    HomeCard({} , HomeScreenState() , {})
 }

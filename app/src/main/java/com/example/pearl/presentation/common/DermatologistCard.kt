@@ -1,4 +1,4 @@
-package com.example.pearl.presentation.dermatologists.components
+package com.example.pearl.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,13 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.presentation.book_appointment.components.DoctorAppointmentButton
-import com.example.pearl.presentation.dermatologists.DermatologistCardData
 import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
+import com.example.pearl.domain.model.Doctor
 
 @Composable
 fun DermatologistCard(
     modifier: Modifier = Modifier,
-    dermatologistCardData: DermatologistCardData
+    dermatologistCardData: Doctor,
+    onFavoriteClick : (Doctor) -> Unit
 ){
     Card(
         modifier = modifier,
@@ -84,7 +85,9 @@ fun DermatologistCard(
                       contentScale = ContentScale.FillBounds,
                       modifier = Modifier
                           .size(25.dp)
-                          .clickable { /*TODO*/ }
+                          .clickable {
+                                onFavoriteClick(dermatologistCardData)
+                          }
                   )
               }
               
@@ -181,5 +184,5 @@ fun DermatologistCard(
 @Composable
 @Preview
 fun PreviewDermatologistCard(){
-    DermatologistCard(dermatologistCardData = nearestDermatologistsCardData[1])
+    DermatologistCard(dermatologistCardData = nearestDermatologistsCardData[1] , onFavoriteClick = {})
 }

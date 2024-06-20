@@ -29,6 +29,8 @@ import com.example.pearl.presentation.common.SearchBar
 
 @Composable
 fun RecommendedProductsScreen(
+    productEvent : (ProductEvents) -> Unit,
+    productsState : ProductScreenState,
     navigateToPreviousTab: () -> Unit,
     navigateToProductDetailsScreen : (String) -> Unit,
     onProductTypeButtonClick : (ProductType) -> Unit
@@ -133,13 +135,17 @@ fun RecommendedProductsScreen(
                 Spacer(modifier = Modifier.height(MediumPadding1))
 
                 LazyRow(Modifier.fillMaxWidth()){
-                    val products = featuredProducts.filter { it.productType == productType}
+                    val products = productsState.products.filter { it.productType == productType}
                     items(3){
                         if(products.size >= 3)
                            FeaturedProductCard(
                                featuredProduct = products[it],
                                onCardClick = {
                                    navigateToProductDetailsScreen(products[it].name)
+                               },
+                               onFavoriteClick = {
+                                   productEvent(ProductEvents.AddRemoveFavoriteProduct(it))
+                                   productEvent(ProductEvents.ObserveOnProductList(products))
                                }
                            )
                     }
@@ -153,5 +159,5 @@ fun RecommendedProductsScreen(
 @Composable
 @Preview
 fun RecommendedProductsScreenPreview(){
-    RecommendedProductsScreen({},{},{})
+    RecommendedProductsScreen({},ProductScreenState(),{},{},{})
 }

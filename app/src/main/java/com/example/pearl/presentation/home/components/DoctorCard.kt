@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding
 import com.example.newsapp.presentation.Dimens.ExtraSmallPadding2
-import com.example.pearl.presentation.home.Doctor
-import com.example.pearl.presentation.home.doctors
+import com.example.pearl.domain.model.Doctor
+import com.example.pearl.domain.model.doctors
 
 @Composable
 fun DoctorCard(
@@ -43,7 +43,9 @@ fun DoctorCard(
             Image(
                 painter = painterResource(id = doctor.image),
                 contentDescription = null,
-                modifier = Modifier.align(CenterHorizontally).size(76.dp,80.dp)
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .size(76.dp, 80.dp)
             )
 
             Spacer(modifier = Modifier.height(ExtraSmallPadding2))
@@ -87,7 +89,7 @@ fun DoctorCard(
                 Spacer(modifier = Modifier.width(ExtraSmallPadding))
 
                 Text(
-                    text = doctor.experience,
+                    text = "${doctor.experience} years",
                     fontSize = 6.sp,
                     fontWeight = FontWeight(600),
                 )

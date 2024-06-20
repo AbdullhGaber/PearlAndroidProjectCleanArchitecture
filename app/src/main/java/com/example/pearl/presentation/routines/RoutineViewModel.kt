@@ -31,6 +31,32 @@ class RoutineViewModel @Inject constructor(
           routineUseCases.getRoutinesUseCase(onSuccess , onFailure)
     }
 
+    private fun addProductToRoutine(product: Product , routineTime : String) {
+
+        val routine = Routine(
+            id = UUID.randomUUID().toString(),
+            product = product,
+            time = getRoutineTimeByString(routineTime)
+        )
+
+        routineUseCases.addRoutineUseCase(
+            routine,
+            onSuccess = {
+                onEvent(RoutineEvents.ShowSuccessDialog)
+            },
+            onFailure = {
+                onEvent(RoutineEvents.ShowFailureDialog(it.message!!))
+            }
+        )
+    }
+    private fun removeRoutine(
+        routineId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit,
+    ){
+        routineUseCases.removeRoutineUseCase(routineId, onSuccess, onFailure)
+    }
+
     fun onEvent(event: RoutineEvents){
         when(event){
             is RoutineEvents.SelectRoutineID -> {
@@ -149,32 +175,5 @@ class RoutineViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun addProductToRoutine(product: Product , routineTime : String) {
-
-        val routine = Routine(
-            id = UUID.randomUUID().toString(),
-            product = product,
-            time = getRoutineTimeByString(routineTime)
-        )
-
-        routineUseCases.addRoutineUseCase(
-            routine,
-            onSuccess = {
-                onEvent(RoutineEvents.ShowSuccessDialog)
-            },
-            onFailure = {
-                onEvent(RoutineEvents.ShowFailureDialog(it.message!!))
-            }
-        )
-    }
-
-    private fun removeRoutine(
-        routineId: String,
-        onSuccess: () -> Unit,
-        onFailure: (Throwable) -> Unit,
-    ){
-        routineUseCases.removeRoutineUseCase(routineId, onSuccess, onFailure)
     }
 }

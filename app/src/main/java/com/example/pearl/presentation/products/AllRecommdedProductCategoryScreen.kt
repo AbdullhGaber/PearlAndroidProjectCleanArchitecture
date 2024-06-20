@@ -2,6 +2,7 @@ package com.example.pearl.presentation.products
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -26,9 +27,11 @@ import com.example.pearl.presentation.common.SearchBar
 
 @Composable
 fun AllRecommendedProductCategoryScreen(
+    productEvent : (ProductEvents) -> Unit,
+    productsState : ProductScreenState,
     productType: ProductType,
-    products : List<Product>,
-    navigateToProductDetailsScreen : (String) -> Unit
+    navigateToProductDetailsScreen : (String) -> Unit,
+    navigateToPrevious : () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -51,6 +54,9 @@ fun AllRecommendedProductCategoryScreen(
                     modifier = Modifier
                         .padding(ExtraSmallPadding2)
                         .size(30.dp)
+                        .clickable {
+                            navigateToPrevious()
+                        }
                 )
 
                 Spacer(modifier = Modifier.width(ExtraSmallPadding2))
@@ -91,11 +97,16 @@ fun AllRecommendedProductCategoryScreen(
                 state = state,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 content = {
+                    val products = productsState.products.filter { it.productType == productType}
                     items(products.size) {
                        FeaturedProductCard(
                            featuredProduct = products[it],
                            onCardClick = {
                                navigateToProductDetailsScreen(products[it].name)
+                           },
+                           onFavoriteClick = {
+                                productEvent(ProductEvents.AddRemoveFavoriteProduct(it))
+                                productEvent(ProductEvents.ObserveOnProductList(products))
                            }
                        )
                     }

@@ -31,6 +31,8 @@ import com.example.pearl.presentation.products.components.CollapsingDropdownMenu
 
 @Composable
 fun ProductDetailsScreen(
+    productEvent : (ProductEvents) -> Unit,
+    productsState : ProductScreenState,
     product: Product,
     navigateToProductDetailsScreen : (String) -> Unit,
     navigateToPrevious : () -> Unit
@@ -150,12 +152,16 @@ fun ProductDetailsScreen(
            Spacer(modifier = Modifier.height(MediumPadding1))
 
            LazyRow(Modifier.fillMaxWidth()){
-               val products = featuredProducts.filter { it.productType.name == ProductType.MOISTURIZER }
+               val products = productsState.products.filter { it.productType.name == ProductType.MOISTURIZER }
                items(3){
                    FeaturedProductCard(
                        featuredProduct = products[it] ,
                        onCardClick = {
                            navigateToProductDetailsScreen(products[it].name)
+                       },
+                       onFavoriteClick = {
+                           productEvent(ProductEvents.AddRemoveFavoriteProduct(it))
+                           productEvent(ProductEvents.ObserveOnProductList(products))
                        }
                    )
                }
@@ -167,5 +173,5 @@ fun ProductDetailsScreen(
 @Preview
 @Composable
 fun ProductDetailsScreenPreview(){
-    ProductDetailsScreen(featuredProducts[1], {} , {})
+    ProductDetailsScreen({},ProductScreenState(),featuredProducts[1], {} , {})
 }

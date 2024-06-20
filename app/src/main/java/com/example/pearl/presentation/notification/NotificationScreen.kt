@@ -22,11 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
-import com.example.pearl.presentation.dermatologists.components.DermatologistCard
-import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
-import com.example.pearl.presentation.dermatologists.dermatologistsSchedule
-import com.example.pearl.presentation.dermatologists.favoriteDermatologistsCardData
-import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
 import com.example.pearl.presentation.notification.components.NotificationCard
 
 @OptIn(ExperimentalFoundationApi::class)

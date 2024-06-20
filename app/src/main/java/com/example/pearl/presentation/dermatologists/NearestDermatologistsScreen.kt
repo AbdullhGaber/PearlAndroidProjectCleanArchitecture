@@ -23,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.presentation.common.SearchBar
-import com.example.pearl.presentation.dermatologists.components.DermatologistCard
+import com.example.pearl.presentation.common.DermatologistCard
 import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
-import com.example.pearl.presentation.pearl_navigator.PearlNavigatorEvents
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NearestDermatologistsScreen(
+    doctorEvents: (DoctorEvents) -> Unit,
+    doctorScreenState: DoctorScreenState,
     navigateToPrevious : () -> Unit
 ){
     Box(
@@ -112,8 +113,8 @@ fun NearestDermatologistsScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            val tabItems = listOf("Dermatologists" , "Favorites" , "My Bookings")
-            var selectedIndex by remember{ mutableStateOf(0) }
+            val tabItems = listOf("Dermatologists" , "My Bookings")
+            var selectedIndex by remember{ mutableIntStateOf(0) }
 
             TabRow(selectedTabIndex = selectedIndex) {
                 tabItems.forEachIndexed{ index: Int, item: String ->
@@ -149,28 +150,17 @@ fun NearestDermatologistsScreen(
                             items(nearestDermatologistsCardData.size){
                                 DermatologistCard(
                                     dermatologistCardData = (nearestDermatologistsCardData[it]),
-                                    modifier = Modifier.padding(5.dp)
+                                    modifier = Modifier.padding(5.dp),
+                                    onFavoriteClick = {
+                                        doctorEvents(DoctorEvents.AddRemoveFavoriteDoctor(it))
+                                        doctorEvents(DoctorEvents.ObserveOnDoctorList(nearestDermatologistsCardData))
+                                    }
                                 )
                             }
                         }
                     }
 
                     1 -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ){
-                            items(favoriteDermatologistsCardData.size){
-                                DermatologistCard(
-                                    dermatologistCardData = (favoriteDermatologistsCardData[it]),
-                                    modifier = Modifier.padding(5.dp)
-                                )
-                            }
-                        }
-                    }
-
-                    2 -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -203,5 +193,5 @@ fun NearestDermatologistsScreen(
 @Preview
 @Composable
 fun PreviewNearestDermatologists(){
-    NearestDermatologistsScreen({})
+    NearestDermatologistsScreen({}, DoctorScreenState(),{})
 }

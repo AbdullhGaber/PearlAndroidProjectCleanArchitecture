@@ -31,11 +31,11 @@ import com.example.pearl.presentation.skin_quiz.QuizScreen
 fun NavGraph(
     startDestination : String,
 ){
-    val navController  = rememberNavController()
+    val navHostController  = rememberNavController()
     val authViewModel : AuthViewModel = hiltViewModel()
     val onBoardingViewModel : OnBoardingViewModel = hiltViewModel()
 
-    NavHost(navController = navController , startDestination = startDestination){
+    NavHost(navController = navHostController , startDestination = startDestination){
         navigation(
             route = Route.AppStartNavigation.route,
             startDestination = Route.IntroductionScreen.route
@@ -44,7 +44,7 @@ fun NavGraph(
                 IntroductionScreen(
                     navigateToOnBoardingScreen = {
                         navigateToTab(
-                            navController,
+                            navHostController,
                             Route.OnBoardingScreen.route
                         )
                     }
@@ -54,7 +54,7 @@ fun NavGraph(
             composable(route = Route.OnBoardingScreen.route){
                 OnBoardingScreen(
                     navigateToAuthScreen = {
-                        navigateToTab(navController = navController , Route.AuthNavigation.route)
+                        navigateToTab(navController = navHostController , Route.AuthNavigation.route)
                     },
                     onBoardingEvent = onBoardingViewModel::onEvent
                 )
@@ -69,10 +69,10 @@ fun NavGraph(
                 authEvent = authViewModel::onEvent ,
                 authState = authViewModel.mAuthState.value,
                 navigateToQuizScreen = {
-                    navigateToTab(navController = navController , Route.QuizScreen.route)
+                    navigateToTab(navController = navHostController , Route.QuizScreen.route)
                 },
                 navigateUp = {
-                    navigateToPreviousTab(navController)
+                    navigateToPreviousTab(navHostController)
                 }
             )
         }
@@ -85,7 +85,7 @@ fun NavGraph(
                     authState = authViewModel.mAuthState.value,
                     authEvent = authViewModel::onEvent,
                     navigateToScreen = {
-                        navigateToTab(navController = navController , it)
+                        navigateToTab(navController = navHostController , it)
                     }
                 )
             }
@@ -97,7 +97,7 @@ fun NavGraph(
                     authState = authViewModel.mAuthState.value,
                     authEvent = authViewModel::onEvent,
                     navigateToScreen = {
-                        navigateToTab(navController = navController , it)
+                        navigateToTab(navController = navHostController , it)
                     }
                 )
             }
@@ -110,10 +110,10 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent ,
                     authState = authViewModel.mAuthState.value,
                     navigateToQuizScreen = {
-                        navigateToTab(navController = navController , Route.QuizScreen.route)
+                        navigateToTab(navController = navHostController , Route.QuizScreen.route)
                     },
                     navigateUp = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -123,10 +123,10 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent ,
                     authState = authViewModel.mAuthState.value,
                     navigateToScreen = {
-                        navigateToTab(navController , it)
+                        navigateToTab(navHostController , it)
                     },
                     navigateUp = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -136,10 +136,10 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent ,
                     authState = authViewModel.mAuthState.value,
                     navigateToScreen = {
-                        navigateToTab(navController , it)
+                        navigateToTab(navHostController , it)
                     },
                     navigateUp = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -149,10 +149,10 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent,
                     authState = authViewModel.mAuthState.value,
                     navigateToScreen = {
-                        navigateToTab(navController , it)
+                        navigateToTab(navHostController , it)
                     },
                     navigateUp = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -162,10 +162,10 @@ fun NavGraph(
                     authEvent = authViewModel::onEvent,
                     authState = authViewModel.mAuthState.value,
                     navigateToScreen = {
-                        navigateToTab(navController, it)
+                        navigateToTab(navHostController, it)
                     },
                     navigateUp = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -173,7 +173,7 @@ fun NavGraph(
             composable(route = Route.PrivacyPolicyScreen.route){
                 PrivacyPolicy(
                     navigateToPreviousTab = {
-                        navigateToPreviousTab(navController)
+                        navigateToPreviousTab(navHostController)
                     }
                 )
             }
@@ -185,14 +185,18 @@ fun NavGraph(
                 quizScreenState = questionViewModel.quizScreenState.value,
                 questionEvent = questionViewModel::onEvent,
                 navigateToHome = {
-                    navigateToTab(navController , Route.PearlNavigation.route)
+                    navigateToTab(navHostController , Route.PearlNavigation.route)
                 }
             )
         }
 
         composable(route = Route.PearlNavigation.route){
             val viewModel : NavigatorViewModel = hiltViewModel()
-            PearlNavigator(pearlNavState = viewModel.mPearlNavState.value , viewModel::onEvent)
+            PearlNavigator(
+                pearlNavState = viewModel.mPearlNavState.value ,
+                pearlNavEvent = viewModel::onEvent ,
+                navHostController = navHostController
+            )
         }
     }
 }

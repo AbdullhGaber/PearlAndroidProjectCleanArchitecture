@@ -9,6 +9,7 @@ import com.simon.xmaterialccp.data.utils.checkPhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.userAgent
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -46,6 +47,25 @@ class AuthViewModel @Inject constructor(
         onFailure: (Throwable) -> Unit
     ){
         authUseCase.resetPasswordUseCase(email , onSuccess , onFailure)
+    }
+
+    private suspend fun deleteAccount(
+        email : String,
+        password : String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ){
+        authUseCase.deleteAccount(email , password , onSuccess, onFailure)
+    }
+
+    private suspend fun updatePassword(
+        email : String,
+        password : String,
+        newPassword : String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ){
+        authUseCase.updatePassword(email , password, newPassword, onSuccess, onFailure)
     }
 
     private fun generateOTP() : String{
@@ -117,7 +137,21 @@ class AuthViewModel @Inject constructor(
 
     fun onEvent(event: AuthEvent){
         when(event){
+            is AuthEvent.UpdateNewPasswordField ->{
+                mAuthState.value = mAuthState.value.copy(newPassword = event.text)
+            }
 
+            is AuthEvent.UpdatePassword ->{
+                    viewModelScope.launch {
+                        updatePassword(event.email , event.password , event.newPassword, event.onSuccess , event.onFailure)
+                    }
+            }
+
+            is AuthEvent.DeleteAccount -> {
+                viewModelScope.launch {
+                    deleteAccount(event.email , event.password , event.onSuccess , event.onFailure)
+                }
+            }
             is AuthEvent.StartTimer -> {
                 viewModelScope.launch {
                    while(mAuthState.value.timeInSeconds > 0 ){

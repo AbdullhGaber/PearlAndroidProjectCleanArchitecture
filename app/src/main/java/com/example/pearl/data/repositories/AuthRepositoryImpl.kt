@@ -106,4 +106,50 @@ class AuthRepositoryImpl(
     ){
         mDatabase.getReference(Constants.USER_REFERENCE).child(user.uid).setValue(user)
     }
+
+    override suspend fun deleteAccount(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        val uid = mFirebaseAuth.currentUser!!.uid
+
+        mFirebaseAuth.signInWithEmailAndPassword(email , password)
+            .addOnSuccessListener {
+                mFirebaseAuth.currentUser!!.delete()
+                    .addOnSuccessListener {
+                        mDatabase.getReference(Constants.USER_REFERENCE).child(uid).removeValue()
+                        onSuccess()
+                        Log.e("AUTH" , "Account deleted successfully")
+                    }.addOnFailureListener {
+                        onFailure(it)
+                        Log.e("AUTH" , "something wrong happened : ${it.message}" )
+                    }
+            }.addOnFailureListener {
+                onFailure(it)
+            }
+    }
+
+    override suspend fun updatePassword(
+        email : String,
+        password: String ,
+        newPassword : String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ){
+        mFirebaseAuth.signInWithEmailAndPassword(email , password)
+            .addOnSuccessListener {
+                mFirebaseAuth.currentUser!!.updatePassword(newPassword)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.e("AUTH" , "Password updated successfully")
+                    }.addOnFailureListener {
+                        onFailure(it)
+                        Log.e("AUTH" , "something wrong happened : ${it.message}" )
+                    }
+            }.addOnFailureListener {
+                onFailure(it)
+            }
+    }
 }

@@ -29,7 +29,7 @@ import com.example.pearl.domain.model.UserGender
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.authentication.components.EmailTextField
-import com.example.pearl.presentation.authentication.components.PasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.presentation.authentication.sign_up.components.AgeTextField
 import com.example.pearl.presentation.authentication.sign_up.components.FirstNameTextField
 import com.example.pearl.presentation.authentication.sign_up.components.PhoneNumberTextField

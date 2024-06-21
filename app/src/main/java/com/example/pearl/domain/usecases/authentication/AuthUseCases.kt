@@ -10,5 +10,7 @@ data class AuthUseCases(
     val validateAgeUseCase: ValidateAgeUseCase,
     val validateAddressUseCase: ValidateAddressUseCase,
     val validateNameUseCase: ValidateNameUseCase,
-    val resetPasswordUseCase: ResetPasswordUseCase
+    val resetPasswordUseCase: ResetPasswordUseCase,
+    val deleteAccount : DeleteAccountUseCase,
+    val updatePassword : UpdatePasswordUseCase
 )

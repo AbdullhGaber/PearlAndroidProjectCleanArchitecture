@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +30,9 @@ fun SettingsScreen(
     navigateToPreviousTab : () -> Unit
 ){
     Box(
-        modifier = Modifier.background(Color.White).fillMaxSize()
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize()
     ){
         Column(modifier = Modifier.padding(20.dp)) {
             Box(
@@ -58,9 +62,11 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(55.dp))
 
             Row(
-                Modifier.fillMaxWidth().clickable {
-                      navigateToScreen(Route.HelpCenterScreen.route)
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigateToScreen(Route.HelpCenterScreen.route)
+                    },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -71,15 +77,22 @@ fun SettingsScreen(
 
                     Text(text = "Help Center" , fontSize = 16.sp , fontWeight = FontWeight.Medium)
                 }
-                
-                Image(painter = painterResource(id = R.drawable.right_arrow), contentDescription = null)
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ad_right_arrow),
+                    tint = colorResource(id =  R.color.pearl_color),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null
+                )
 
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             Row(
-                Modifier.fillMaxWidth().clickable {  navigateToScreen(Route.PasswordManagerScreen.route)  },
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { navigateToScreen(Route.PasswordManagerScreen.route) },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -91,13 +104,20 @@ fun SettingsScreen(
                     Text(text = "Password Manager" , fontSize = 16.sp , fontWeight = FontWeight.Medium)
                 }
 
-                Image(painter = painterResource(id = R.drawable.right_arrow), contentDescription = null)
+                Icon(
+                    painter = painterResource(id = R.drawable.ad_right_arrow),
+                    tint = colorResource(id =  R.color.purple_500),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null
+                )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             Row(
-                Modifier.fillMaxWidth().clickable {  navigateToScreen(Route.DeleteAccountScreen.route)  },
+                Modifier
+                    .fillMaxWidth()
+                    .clickable { navigateToScreen(Route.DeleteAccountScreen.route) },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -109,7 +129,12 @@ fun SettingsScreen(
                     Text(text = "Delete Account" , fontSize = 16.sp , fontWeight = FontWeight.Medium)
                 }
 
-                Image(painter = painterResource(id = R.drawable.right_arrow), contentDescription = null)
+                Icon(
+                    painter = painterResource(id = R.drawable.ad_right_arrow),
+                    tint = colorResource(id =  R.color.purple_500),
+                    modifier = Modifier.size(24.dp),
+                    contentDescription = null
+                )
             }
 
         }

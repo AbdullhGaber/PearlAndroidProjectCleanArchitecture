@@ -18,7 +18,7 @@ import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
-import com.example.pearl.presentation.authentication.components.PasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 
 @Composable
 fun ChangePasswordScreen(

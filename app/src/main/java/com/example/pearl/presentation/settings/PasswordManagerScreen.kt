@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
-import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -20,11 +19,17 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
-import com.example.pearl.presentation.authentication.components.PasswordTextField
+import com.example.pearl.presentation.authentication.components.EmailTextField
+import com.example.pearl.presentation.common.NewPasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.presentation.common.PrimaryButton
+import com.example.pearl.presentation.util.ErrorDialog
+import com.example.pearl.presentation.util.PrimaryDialog
 
 @Composable
 fun PasswordManagerScreen(
+    settingsScreensState: SettingsScreensState,
+    settingsEvent: (SettingsEvent) -> Unit,
     authState : AuthState,
     authEvent: (AuthEvent) -> Unit,
     navigateToPrevious : () -> Unit
@@ -34,6 +39,32 @@ fun PasswordManagerScreen(
             .background(Color.White)
             .fillMaxSize()
     ){
+        if(settingsScreensState.showErrorDialog){
+            ErrorDialog(
+                title = settingsScreensState.error?.message ?: "Unknown Error",
+                message = "Try again",
+                onDismiss = {
+                    settingsEvent(SettingsEvent.HideErrorDialog)
+                }
+            )
+        }
+
+        if(settingsScreensState.showSuccessDialog){
+            PrimaryDialog(
+                icon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.done_successfully),
+                        contentDescription = null
+                    )
+                },
+                title ="Password updated successfully",
+                message = "Keep it in somewhere safe",
+                onDismiss = {
+                    settingsEvent(SettingsEvent.HideSuccessDialog)
+                }
+            )
+        }
+
         Column(modifier = Modifier.padding(20.dp)) {
             Box(
                 modifier = Modifier
@@ -61,47 +92,32 @@ fun PasswordManagerScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = "Current Password" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
+            Text(text = "Email" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            PasswordTextField(
-                enabled = false,
-                text = "abc123123",
-                label = "",
-                authState = authState,
-                authEvent = authEvent
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "Forgot Password",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF6767F7),
-                modifier = Modifier.align(End)
-            )
-
-            Spacer(modifier = Modifier.height(37.dp))
-
-            Text(text = "New Password" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            PasswordTextField(
-                label = "",
+            EmailTextField(
                 authState = authState,
                 authEvent = authEvent
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Confirm New Password" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
+            Text(text = "Current Password" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
 
             Spacer(modifier = Modifier.height(8.dp))
 
             PasswordTextField(
+                label = "",
+                authState = authState,
+                authEvent = authEvent
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(text = "New Password" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
+
+            NewPasswordTextField(
                 label = "",
                 authState = authState,
                 authEvent = authEvent
@@ -110,7 +126,20 @@ fun PasswordManagerScreen(
         
         PrimaryButton(
             text = "Change Password",
-            onClick = { /*TODO*/ },
+            onClick = {
+                authEvent(AuthEvent.UpdatePassword(
+                    email = authState.email,
+                    password = authState.password,
+                    newPassword = authState.newPassword,
+                    onSuccess = {
+                        settingsEvent(SettingsEvent.ShowSuccessDialog)
+                    },
+                    onFailure = {
+                        settingsEvent(SettingsEvent.ShowErrorDialog(it))
+                    }
+                )
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(BottomCenter)
@@ -123,5 +152,11 @@ fun PasswordManagerScreen(
 @Composable
 @Preview
 fun PreviewPasswordManager(){
-//    PasswordManagerScreen()
+    PasswordManagerScreen(
+        settingsEvent = {},
+        settingsScreensState = SettingsScreensState(),
+        authEvent = {},
+        authState = AuthState(),
+        navigateToPrevious = {}
+    )
 }

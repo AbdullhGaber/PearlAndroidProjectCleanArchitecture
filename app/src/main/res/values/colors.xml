@@ -12,6 +12,7 @@
 
     <color name="primary_background">#FFFAF6FF</color>
     <color name="secondary_background">#FFF5FFF7</color>
+    <color name="pearl_color">#FF6767F7</color>
     <color name="quiz_selection">#FF79DA8D</color>
     <color name="small_text">#FF7F7F7F</color>
     <color name="grey">#FFC7B4FF</color>

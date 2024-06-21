@@ -23,5 +23,19 @@ interface AuthRepository {
         onFailure: (Throwable) -> Unit
     )
 
+    suspend fun deleteAccount(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
+    suspend fun updatePassword(
+        email : String,
+        password: String ,
+        newPassword : String,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
+
     fun sendOTP(to : String , from : String , body : String)
 }

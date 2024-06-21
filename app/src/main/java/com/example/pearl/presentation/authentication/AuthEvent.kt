@@ -9,6 +9,7 @@ sealed class AuthEvent{
     data class UpdateLastNameField(val text : String) : AuthEvent()
     data class UpdateEmailField(val text : String) : AuthEvent()
     data class UpdatePasswordField(val text : String) : AuthEvent()
+    data class UpdateNewPasswordField(val text : String) : AuthEvent()
     object UpdatePasswordVisibility : AuthEvent()
     data class UpdatePhoneNumber(val text : String) : AuthEvent()
     data class UpdateAge(val text : String) : AuthEvent()
@@ -31,7 +32,19 @@ sealed class AuthEvent{
         val email: String,
         val onSuccess: () -> Unit,
     ) : AuthEvent()
-
+    data class DeleteAccount(
+        val email: String,
+        val password: String,
+        val onSuccess: () -> Unit,
+        val onFailure: (Throwable) -> Unit,
+    ) : AuthEvent()
+    data class UpdatePassword(
+        val email: String,
+        val password: String,
+        val newPassword : String,
+        val onSuccess: () -> Unit,
+        val onFailure: (Throwable) -> Unit,
+    ) : AuthEvent()
     object StartTimer : AuthEvent()
     object ResetTimer : AuthEvent()
     object SignUp : AuthEvent()

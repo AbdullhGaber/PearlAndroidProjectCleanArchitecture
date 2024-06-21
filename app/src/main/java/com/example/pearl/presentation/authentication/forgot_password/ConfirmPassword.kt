@@ -22,7 +22,7 @@ import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.CloseIconButton
-import com.example.pearl.presentation.authentication.components.PasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.util.ErrorDialog
 import com.example.pearl.presentation.util.LoadingDialog

@@ -20,20 +20,65 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
+import com.example.pearl.presentation.authentication.AuthEvent
+import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.common.PrimaryButton
+import com.example.pearl.presentation.nav_graph.Route
+import com.example.pearl.presentation.util.ErrorDialog
+import com.example.pearl.presentation.util.LoginDialog
+import com.example.pearl.presentation.util.PrimaryDialog
 
 @Composable
 fun DeleteAccountScreen(
+    authState : AuthState,
+    authEvent: (AuthEvent) -> Unit,
+    settingsScreensState: SettingsScreensState,
+    settingsEvent: (SettingsEvent) -> Unit,
+    navigateToScreen : (String) -> Unit,
     navigateToPrevious : () -> Unit
 ){
     val scrollState = rememberScrollState()
+
+    if(settingsScreensState.showErrorDialog){
+        ErrorDialog(
+            title = settingsScreensState.error?.message ?: "Unknown Error",
+            message = "Try again",
+            onDismiss = {
+                settingsEvent(SettingsEvent.HideErrorDialog)
+            }
+        )
+    }
+
+
+    if (settingsScreensState.showLoginDialog){
+
+        LoginDialog(
+            authState = authState,
+            authEvent = authEvent,
+            onConfirm = {
+                authEvent(AuthEvent.DeleteAccount(
+                    email = authState.email,
+                    password = authState.password,
+                    onSuccess = {
+                        navigateToScreen(Route.AuthNavigation.route)
+                    },
+                    onFailure = {
+                        settingsEvent(SettingsEvent.ShowErrorDialog(it))
+                    }
+                ))
+            },
+            onDismiss = {
+                settingsEvent(SettingsEvent.HideLoginDialog)
+            }
+        )
+    }
 
     Box(
         modifier = Modifier
             .background(Color.White)
             .fillMaxSize()
             .verticalScroll(scrollState)
-    ) {
+    ){
         Column(modifier = Modifier.padding(20.dp)) {
             Box(
                 modifier = Modifier
@@ -170,7 +215,9 @@ fun DeleteAccountScreen(
         
         PrimaryButton(
             text = "Delete Account",
-            onClick = { /*TODO*/ },
+            onClick = {
+                  settingsEvent(SettingsEvent.ShowLoginDialog)
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(10.dp)
@@ -182,5 +229,5 @@ fun DeleteAccountScreen(
 @Composable
 @Preview
 fun PreviewDeleteAccountScreen(){
-    DeleteAccountScreen({})
+//    DeleteAccountScreen({},{},{})
 }

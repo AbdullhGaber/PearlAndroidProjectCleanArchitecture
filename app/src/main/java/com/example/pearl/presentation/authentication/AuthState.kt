@@ -7,6 +7,7 @@ data class AuthState(
     val firstName : String = "",
     val lastName : String = "",
     val password : String = "",
+    val newPassword : String = "",
     val passwordVisibility : Boolean = false,
     val phoneNo : String = "",
     val age : String = "",

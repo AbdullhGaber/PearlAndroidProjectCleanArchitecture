@@ -1,4 +1,4 @@
-package com.example.pearl.presentation.authentication.components
+package com.example.pearl.presentation.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

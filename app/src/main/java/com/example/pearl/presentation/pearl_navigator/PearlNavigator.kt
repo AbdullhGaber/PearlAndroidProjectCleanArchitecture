@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.pearl.R
 import com.example.pearl.presentation.authentication.AuthViewModel
 import com.example.pearl.presentation.avoid_stick_routines.StickAvoidRoutineScreen
@@ -80,6 +81,7 @@ import com.example.pearl.presentation.routines.RoutineViewModel
 import com.example.pearl.presentation.settings.DeleteAccountScreen
 import com.example.pearl.presentation.settings.HelpCenterScreen
 import com.example.pearl.presentation.settings.PasswordManagerScreen
+import com.example.pearl.presentation.settings.SettingsViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -88,9 +90,10 @@ typealias PearlNavEventFunction = (PearlNavigatorEvents) -> Unit
 @Composable
 fun PearlNavigator(
     pearlNavState: PearlNavState,
-    pearlNavEvent : PearlNavEventFunction
+    pearlNavEvent : PearlNavEventFunction,
+    navHostController : NavHostController
 ){
-    val navController = rememberNavController()
+    val pearlNavController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
@@ -110,7 +113,7 @@ fun PearlNavigator(
                             pearlNavEvent(
                                 PearlNavigatorEvents.NavigateTo(
                                     Route.ProfileScreen.route,
-                                    navController
+                                    pearlNavController
                                 )
                             )
                         }
@@ -177,9 +180,9 @@ fun PearlNavigator(
 
                             if(route == Route.CommunityScreen.route) {
                                 pearlNavEvent(PearlNavigatorEvents.UpdateBottomNavItemIndex(4))
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route,navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route,pearlNavController))
                             }else{
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route,navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route,pearlNavController))
                             }
                         },
                         icon = {
@@ -234,7 +237,7 @@ fun PearlNavigator(
                             painter = painterResource(id = R.drawable.ic_baseline_notifications_none_24),
                             contentDescription = null,
                             modifier = Modifier.clickable {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.NotificationScreen.route , navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.NotificationScreen.route , pearlNavController))
                             }
                         )
                     }
@@ -250,7 +253,7 @@ fun PearlNavigator(
 
                         val route = getBottomNavigationScreenRouteByIndex(it)
 
-                        pearlNavEvent(PearlNavigatorEvents.NavigateTo(route , navController))
+                        pearlNavEvent(PearlNavigatorEvents.NavigateTo(route , pearlNavController))
                     }
                 }
             },
@@ -260,9 +263,9 @@ fun PearlNavigator(
                 val targetRoute = getBottomNavigationScreenRouteByIndex(pearlNavState.prevNavItemIndex)
 
                 if(bottomNavRoutes.contains(targetRoute)){
-                    pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(navController))
+                    pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(pearlNavController))
                 }else{
-                    pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                    pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                 }
             }
 
@@ -270,7 +273,7 @@ fun PearlNavigator(
             val routineViewModel : RoutineViewModel = hiltViewModel()
             val homeViewModel : HomeViewModel = hiltViewModel()
             NavHost(
-                navController = navController ,
+                navController = pearlNavController ,
                 startDestination = Route.HomeNavigation.route,
                 modifier = Modifier.padding(bottom = bottomPadding)
             ){
@@ -283,7 +286,7 @@ fun PearlNavigator(
                                 }else if(route == Route.ProgressScreen.route){
                                     pearlNavEvent(PearlNavigatorEvents.UpdateBottomNavItemIndex(1))
                                 }
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route = route , navController = navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route = route , navController = pearlNavController))
                             },
                             homeScreenState = homeViewModel.mHomeScreenState.value,
                             homeScreenEvents = homeViewModel::onEvent
@@ -294,7 +297,7 @@ fun PearlNavigator(
                 composable(route = Route.ProgressScreen.route){
                     SkinProgressScreen(
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(pearlNavController))
                         }
                     )
                 }
@@ -305,10 +308,10 @@ fun PearlNavigator(
                         productScreenState = productViewModel.productScreenState.value,
                         productEvents = productViewModel::onEvent,
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(pearlNavController))
                         },
                         navigateToScreen = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,pearlNavController))
                         }
                     )
                 }
@@ -322,10 +325,10 @@ fun PearlNavigator(
                          productsState = productViewModel.productScreenState.value,
                          productType = productType,
                          navigateToProductDetailsScreen = {
-                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$it", navController))
+                             pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$it", pearlNavController))
                          },
                          navigateToPrevious = {
-                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                          }
                      )
                 }
@@ -339,10 +342,10 @@ fun PearlNavigator(
                         productsState = productViewModel.productScreenState.value,
                         product = product ,
                         navigateToProductDetailsScreen = { name ->
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$name", navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$name", pearlNavController))
                         },
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -353,13 +356,13 @@ fun PearlNavigator(
                         productEvent = productViewModel::onEvent,
                         productsState = productViewModel.productScreenState.value,
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         },
                         onProductTypeButtonClick = {productType ->
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.AllRecommendedProductCategoryScreen.route}/${productType.name}", navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.AllRecommendedProductCategoryScreen.route}/${productType.name}", pearlNavController))
                         },
                         navigateToProductDetailsScreen = { productName ->
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", pearlNavController))
                         }
                     )
                 }
@@ -373,10 +376,10 @@ fun PearlNavigator(
                         productsState = productViewModel.productScreenState.value,
                         productType = productType,
                         navigateToProductDetailsScreen = { productName ->
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo("${Route.ProductDetailsScreen.route}/$productName", pearlNavController))
                         },
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -387,7 +390,7 @@ fun PearlNavigator(
                         doctorEvents = doctorViewModel::onEvent,
                         doctorScreenState = doctorViewModel.doctorScreenState.value,
                         navigateToPrevious = {
-                           pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                           pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -398,10 +401,10 @@ fun PearlNavigator(
                     DermatologistDetailsScreen(
                         doctor = doctor,
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         },
                         navigateToScreen = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.PaymentNavigation.route , navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.PaymentNavigation.route , pearlNavController))
                         }
                     )
                 }
@@ -410,11 +413,11 @@ fun PearlNavigator(
                     composable(route = Route.RoutineScreen.route){
                         RoutineScreen(
                             navigateToPreviousTab = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousBottomTab(pearlNavController))
                             },
 
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,pearlNavController))
                             },
                             routineEvents = routineViewModel::onEvent,
                         )
@@ -426,11 +429,11 @@ fun PearlNavigator(
                             routineEvents = routineViewModel::onEvent,
 
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                             },
 
                             navigateToScreen = { route ->
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route, navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(route, pearlNavController))
                             }
                         )
                     }
@@ -439,10 +442,10 @@ fun PearlNavigator(
                 composable(route = Route.NutritionRoutineScreen.route){
                     NutritionRoutineScreen(
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         },
                         navigateToScreen = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,pearlNavController))
                         }
                     )
                 }
@@ -450,7 +453,7 @@ fun PearlNavigator(
                 composable(route = Route.StickAvoidRoutineScreen.route){
                     StickAvoidRoutineScreen(
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -458,10 +461,10 @@ fun PearlNavigator(
                 composable(route = Route.RecipesScreen.route){
                      RecipesScreen(
                          navigateToPrevious = {
-                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                          },
                          navigateToScreen = {
-                             pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
+                             pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,pearlNavController))
                          }
                      )
                 }
@@ -472,7 +475,7 @@ fun PearlNavigator(
                     RecipesDetailsScreen(
                         recipesData = recipe,
                         naviagteToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -480,7 +483,7 @@ fun PearlNavigator(
                 composable(route = Route.CommunityScreen.route){
                     CommunityScreen(
                         navigateToTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = it))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = it))
                         }
                     )
                 }
@@ -489,11 +492,11 @@ fun PearlNavigator(
                     composable(route = Route.BookAppointmentScreen.route){
                         BookAppointmentScreen(
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = Route.PaymentMethodScreen.route))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = Route.PaymentMethodScreen.route))
                             },
 
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
                             }
                         )
                     }
@@ -501,11 +504,11 @@ fun PearlNavigator(
                     composable(route = Route.PaymentMethodScreen.route){
                         PaymentMethodScreen(
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
                             },
 
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = Route.PaymentSuccessScreen.route))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = Route.PaymentSuccessScreen.route))
                             }
                         )
                     }
@@ -513,7 +516,7 @@ fun PearlNavigator(
                     composable(route = Route.PaymentSuccessScreen.route){
                         PaymentSuccessScreen(
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = it))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = it))
                             }
                         )
                     }
@@ -521,10 +524,10 @@ fun PearlNavigator(
                     composable(route = Route.ReviewSummaryScreen.route){
                         ReviewSummaryScreen(
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
                             },
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = it))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = it))
                             }
                         )
                     }
@@ -532,10 +535,10 @@ fun PearlNavigator(
                     composable(route = Route.MyAppointmentScreen.route){
                         MyAppointmentScreen(
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
                             },
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = navController , route = it))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = it))
                             }
                         )
                     }
@@ -544,7 +547,7 @@ fun PearlNavigator(
                 composable(route = Route.NotificationScreen.route){
                     NotificationScreen(
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }
@@ -552,7 +555,7 @@ fun PearlNavigator(
                 composable(route = Route.MySkinScreen.route){
                     MySkinScreen(
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                         }
                     )
                 }
@@ -560,7 +563,7 @@ fun PearlNavigator(
                 composable(route = Route.MyAppointmentsScreen.route){
                     MyAppointmentsScreen(
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                         }
                     )
                 }
@@ -572,10 +575,10 @@ fun PearlNavigator(
                         favoriteScreenEvents = favoriteViewModel::onEvent,
                         favoriteScreenState = favoriteViewModel.mFavoriteScreenState.value,
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                         },
                         navigateToScreen = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(it,pearlNavController))
                         }
                     )
                 }
@@ -583,7 +586,7 @@ fun PearlNavigator(
                 composable(route = Route.PrivacyPolicyScreen.route){
                     PrivacyPolicy(
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                         }
                     )
                 }
@@ -592,10 +595,10 @@ fun PearlNavigator(
                     composable(route = Route.SettingsScreen.route){
                         SettingsScreen(
                             navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(it , navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(it , pearlNavController))
                             },
                             navigateToPreviousTab = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                             }
                         )
                     }
@@ -603,26 +606,38 @@ fun PearlNavigator(
                     composable(route = Route.HelpCenterScreen.route){
                         HelpCenterScreen(
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                             }
                         )
                     }
 
                     composable(route = Route.PasswordManagerScreen.route){
                         val authViewModel : AuthViewModel = hiltViewModel()
+                        val settingsViewModel : SettingsViewModel  = hiltViewModel()
                         PasswordManagerScreen(
+                            settingsEvent = settingsViewModel::onEvent,
+                            settingsScreensState = settingsViewModel.settingsScreensState.value,
                             authEvent = authViewModel::onEvent,
                             authState = authViewModel.mAuthState.value,
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                             }
                         )
                     }
 
                     composable(route = Route.DeleteAccountScreen.route){
+                        val authViewModel : AuthViewModel  = hiltViewModel()
+                        val settingsViewModel : SettingsViewModel  = hiltViewModel()
                         DeleteAccountScreen(
+                            authState = authViewModel.mAuthState.value,
+                            authEvent = authViewModel::onEvent,
+                            settingsEvent = settingsViewModel::onEvent,
+                            settingsScreensState = settingsViewModel.settingsScreensState.value,
+                            navigateToScreen = {
+                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(it , navHostController))
+                            },
                             navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                             }
                         )
                     }
@@ -631,7 +646,7 @@ fun PearlNavigator(
                 composable(route = Route.QrCodeScreen.route){
                     QrCodeScreen(
                         navigateToPreviousTab = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPreviousSideTab(pearlNavController))
                         }
                     )
                 }
@@ -639,7 +654,7 @@ fun PearlNavigator(
                 composable(route = Route.ProfileScreen.route){
                     ProfileScreen(
                         navigateToPrevious = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController))
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }
                     )
                 }

@@ -19,10 +19,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
+import com.example.pearl.domain.model.User
+import com.example.pearl.domain.model.UserGender
+import com.example.pearl.presentation.common.PrimaryButton
 import com.example.pearl.presentation.common.PrimaryTextField
+import com.example.pearl.presentation.common.RadioButtonWithLabel
+import com.example.pearl.presentation.util.ErrorDialog
+import com.example.pearl.presentation.util.PrimaryDialog
 
 @Composable
 fun ProfileScreen(
+    profileScreenState: ProfileScreenState,
+    profileEvents: (ProfileEvents) -> Unit,
     navigateToPrevious : () -> Unit
 ){
     val scrollState = rememberScrollState()
@@ -32,11 +40,38 @@ fun ProfileScreen(
         .background(Color.White)
         .verticalScroll(scrollState)
     ){
-        Column(modifier = Modifier.padding(20.dp)) {
+        if(profileScreenState.showErrorDialog){
+            ErrorDialog(
+                title = profileScreenState.errorMessage?.message!!,
+                message = "Try again",
+                onDismiss = {
+                    profileEvents(ProfileEvents.HideErrorDialog)
+                    profileEvents(ProfileEvents.UpdateErrorMessage(null))
+                }
+            )
+        }
+
+        if (profileScreenState.showSuccessDialog){
+            PrimaryDialog(
+                icon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.done_successfully),
+                        contentDescription = null
+                    )
+                },
+                title ="Profile updated successfully",
+                message = "Keep it in somewhere safe",
+                onDismiss = {
+                    profileEvents(ProfileEvents.HideSuccessDialog)
+                }
+            )
+        }
+        Column(modifier = Modifier.padding(20.dp)){
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp)) {
+                    .padding(top = 10.dp)
+            ){
                 Image(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = null,
@@ -83,63 +118,87 @@ fun ProfileScreen(
 
             Text(text = "Name" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            PrimaryTextField(placeholder = "Salem Ahmed" , enabled = false, modifier = Modifier.fillMaxWidth())
+            PrimaryTextField(
+                onValueChange = {
+                      profileEvents(ProfileEvents.UpdateNameField(it))
+                },
+                value = profileScreenState.name,
+                placeholder = profileScreenState.user.name,
+                enabled = true,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Phone Number" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            PrimaryTextField(placeholder = "+20 102 896 5872" , enabled = false, modifier = Modifier.fillMaxWidth() , trailingIcon = {
-                Text(
-                    text = "Change",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF7A7AF8)
-                )
-            })
+            PrimaryTextField(
+                placeholder = profileScreenState.user.phoneNo,
+                enabled = false,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Email" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            PrimaryTextField(placeholder = "salemahmed@gmail.com" , enabled = false, modifier = Modifier.fillMaxWidth() , trailingIcon = {
-                Text(
-                    text = "Change",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF7A7AF8)
-                )
-            })
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = "Country" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
-            Spacer(modifier = Modifier.height(8.dp))
-            PrimaryTextField(placeholder = "Egypt" , enabled = false, modifier = Modifier.fillMaxWidth() , trailingIcon = {
-                Image(painter = painterResource(id = R.drawable.dropdown_arrow), contentDescription = null)
-            })
+            PrimaryTextField(
+                placeholder = profileScreenState.user.email,
+                enabled = false,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Gender" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
-            PrimaryTextField(placeholder = "Male" , enabled = false, modifier = Modifier.fillMaxWidth() , trailingIcon = {
-                Image(painter = painterResource(id = R.drawable.dropdown_arrow), contentDescription = null)
-            })
+            Row(
+                modifier = Modifier.padding(vertical = 16.dp)
+            ){
+                RadioButtonWithLabel(
+                    label = "Male",
+                    selected = UserGender.MALE == profileScreenState.gender,
+                    onClick = {
+                        profileEvents(ProfileEvents.UpdateGenderField(UserGender.MALE))
+                    }
+                )
+
+                RadioButtonWithLabel(
+                    label = "Female",
+                    selected = UserGender.FEMALE == profileScreenState.gender,
+                    onClick = {
+                        profileEvents(ProfileEvents.UpdateGenderField(UserGender.FEMALE))
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Age" , fontSize = 14.sp , fontWeight = FontWeight.Medium)
             Spacer(modifier = Modifier.height(8.dp))
             PrimaryTextField(
-                placeholder = "22",
-                enabled = false,
+                onValueChange = {
+                    profileEvents(ProfileEvents.UpdateAgeField(it))
+                },
+                placeholder = profileScreenState.user.age,
+                value = profileScreenState.age,
+                enabled = true,
                 modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.dropdown_arrow),
-                        contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            PrimaryButton(
+                modifier = Modifier.fillMaxWidth(),
+                text ="Update Profile",
+                onClick = {
+                    val user = User(
+                        name = profileScreenState.name,
+                        age = profileScreenState.age,
+                        gender = profileScreenState.gender,
                     )
+
+                    profileEvents(ProfileEvents.UpdateProfile(user))
                 }
             )
         }
@@ -149,5 +208,5 @@ fun ProfileScreen(
 @Composable
 @Preview
 fun PreviewProfileScreen(){
-    ProfileScreen({})
+    ProfileScreen(ProfileScreenState() ,{} , {})
 }

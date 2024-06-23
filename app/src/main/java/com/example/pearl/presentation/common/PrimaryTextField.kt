@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 fun PrimaryTextField(
     modifier: Modifier = Modifier,
     value : String = "",
-    placeholder : String,
+    placeholder : String="",
     onValueChange : (String) -> Unit = {},
     enabled : Boolean = true,
     trailingIcon : @Composable () -> Unit = {}

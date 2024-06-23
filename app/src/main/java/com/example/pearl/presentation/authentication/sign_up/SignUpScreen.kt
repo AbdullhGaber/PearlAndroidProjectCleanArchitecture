@@ -34,7 +34,7 @@ import com.example.pearl.presentation.authentication.sign_up.components.AgeTextF
 import com.example.pearl.presentation.authentication.sign_up.components.FirstNameTextField
 import com.example.pearl.presentation.authentication.sign_up.components.PhoneNumberTextField
 import com.example.pearl.presentation.authentication.sign_up.components.LastNameTextField
-import com.example.pearl.presentation.authentication.sign_up.components.RadioButtonWithLabel
+import com.example.pearl.presentation.common.RadioButtonWithLabel
 import com.example.pearl.presentation.common.*
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.sign_in.components.CenteredTextBetweenTwoLines
@@ -112,7 +112,7 @@ fun SignUpScreen(
             ) {
                 RadioButtonWithLabel(
                     label = "Male",
-                    selected = authState.gender.name == "MALE",
+                    selected = authState.gender == UserGender.MALE,
                     onClick = {
                         authEvent(AuthEvent.UpdateGender(UserGender.MALE))
                     }
@@ -120,7 +120,7 @@ fun SignUpScreen(
 
                 RadioButtonWithLabel(
                     label = "Female",
-                    selected = authState.gender.name == "FEMALE",
+                    selected = authState.gender == UserGender.FEMALE,
                     onClick = {
                         authEvent(AuthEvent.UpdateGender(UserGender.FEMALE))
                     }

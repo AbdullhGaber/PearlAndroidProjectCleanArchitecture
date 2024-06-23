@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
                             }
 
                             override fun onCancelled(p0: DatabaseError) {
-                                TODO("Not yet implemented")
+
                             }
                         }
                     )

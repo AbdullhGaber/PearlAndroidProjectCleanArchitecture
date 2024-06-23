@@ -29,7 +29,6 @@ fun PhoneNumberTextField(
     ) {
         MaterialCountryCodePicker(
             pickedCountry = {
-//                authEvent(AuthEvent.UpdatePhoneCodeAndDefaultLang(it))
 
                 authEvent(AuthEvent.UpdatePhoneDefaultLang(it.countryCode))
 

@@ -73,6 +73,7 @@ import com.example.pearl.presentation.payments.PaymentSuccessScreen
 import com.example.pearl.presentation.payments.ReviewSummaryScreen
 import com.example.pearl.presentation.products.ProductViewModel
 import com.example.pearl.presentation.profile.ProfileScreen
+import com.example.pearl.presentation.profile.ProfileViewModel
 import com.example.pearl.presentation.recipes.RecipesDetailsScreen
 import com.example.pearl.presentation.recipes.RecipesScreen
 import com.example.pearl.presentation.recipes.recipesList
@@ -107,15 +108,10 @@ fun PearlNavigator(
                     modifier = Modifier
                         .padding(NavigationDrawerItemDefaults.ItemPadding)
                         .clickable {
-                            runBlocking {
+                            coroutineScope.launch {
                                 drawerState.close()
                             }
-                            pearlNavEvent(
-                                PearlNavigatorEvents.NavigateTo(
-                                    Route.ProfileScreen.route,
-                                    pearlNavController
-                                )
-                            )
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.ProfileScreen.route,pearlNavController))
                         }
                 ){
                     Image(
@@ -652,7 +648,10 @@ fun PearlNavigator(
                 }
 
                 composable(route = Route.ProfileScreen.route){
+                    val profileViewModel : ProfileViewModel = hiltViewModel()
                     ProfileScreen(
+                        profileScreenState = profileViewModel.profileScreenState,
+                        profileEvents = profileViewModel::onEvent,
                         navigateToPrevious = {
                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         }

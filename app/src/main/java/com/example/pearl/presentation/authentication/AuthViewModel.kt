@@ -331,8 +331,7 @@ class AuthViewModel @Inject constructor(
                     val fullPhone = "$phoneCode$phoneNo"
 
                     val userDataMap = mapOf(
-                        "firstName" to authScreenState.firstName,
-                        "lastName" to authScreenState.lastName,
+                        "name" to "${authScreenState.firstName} ${authScreenState.lastName}",
                         "phoneNumber" to fullPhone,
                         "age" to authScreenState.age,
                         "gender" to authScreenState.gender,

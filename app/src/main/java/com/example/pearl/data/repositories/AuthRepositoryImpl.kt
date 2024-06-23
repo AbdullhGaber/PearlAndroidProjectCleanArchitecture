@@ -9,7 +9,11 @@ import com.example.pearl.domain.model.UserGender
 import com.example.pearl.domain.repositories.AuthRepository
 import com.example.pearl.util.Constants
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,8 +55,7 @@ class AuthRepositoryImpl(
 
                     val user = User(
                         uid = it.user!!.uid,
-                        firstName = userDataMap["firstName"] as String,
-                        lastName = userDataMap["lastName"] as String,
+                        name = userDataMap["name"] as String,
                         email = email,
                         phoneNo = userDataMap["phoneNumber"] as String,
                         gender = userDataMap["gender"] as UserGender,
@@ -151,5 +154,49 @@ class AuthRepositoryImpl(
             }.addOnFailureListener {
                 onFailure(it)
             }
+    }
+
+    override suspend fun updateProfile(
+        user : User,
+        onSuccess: () -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        val uid = mFirebaseAuth.currentUser!!.uid
+
+        val userRef = mDatabase.getReference(Constants.USER_REFERENCE).child(uid)
+
+        userRef.get().addOnCompleteListener {
+            var currentUser = it.result.getValue(User::class.java)
+
+            currentUser = currentUser?.copy(name = user.name , gender = user.gender, age = user.age)
+
+            userRef.setValue(currentUser).addOnSuccessListener {
+                onSuccess()
+                Log.e("Update Profile" , "profile updated successfully")
+            }.addOnFailureListener {
+                Log.e("Update Profile" , "Something went wrong : ${it.message}")
+                onFailure(it)
+            }
+        }
+    }
+
+    override suspend fun getUser(
+        onSuccess: (User) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ){
+        val uid = mFirebaseAuth.currentUser!!.uid
+
+        val userRef = mDatabase.getReference(Constants.USER_REFERENCE).child(uid)
+
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val currentUser = snapshot.getValue(User::class.java)
+                onSuccess(currentUser!!)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onFailure(error.toException())
+            }
+        })
     }
 }

@@ -35,7 +35,6 @@ fun ThirdQuizEndingScreen(
     Box(
         modifier = Modifier
             .background(Color.White)
-            .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
         Column(
@@ -59,8 +58,9 @@ fun ThirdQuizEndingScreen(
                     .background(Color(0xFFDED5FE))
             ){
                 Text(
-                    text = "Combination",
-                    fontSize = 16.sp,
+                    modifier = Modifier.padding(10.dp),
+                    text = "Dry",
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Normal,
                 )
             }
@@ -68,7 +68,7 @@ fun ThirdQuizEndingScreen(
             Spacer(modifier = Modifier.height(33.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.face_analysis),
+                painter = painterResource(id = R.drawable.face1),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -76,32 +76,8 @@ fun ThirdQuizEndingScreen(
                 contentScale = ContentScale.FillBounds
             )
 
-            Spacer(modifier = Modifier.height(26.dp))
-
-            Row(Modifier.fillMaxWidth() , Arrangement.SpaceBetween){
-                repeat(issueCircleDataList.size){
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.weight(1f)
-                    ){
-                        IssuesCircle(
-                            percent = issueCircleDataList[it].percent,
-                            backgroundColor = issueCircleDataList[it].backgroundColor,
-                            edgeColor = issueCircleDataList[it].edgeColor
-                        )
-
-                        Spacer(modifier = Modifier.height(9.dp))
-
-                        Text(
-                            text = issueCircleDataList[it].issue,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium,
-                        )
-                    }
-                }
-            }
-
             Spacer(modifier = Modifier.height(20.dp))
+
             Box(modifier = Modifier
                 .padding(10.dp)
             ){
@@ -119,7 +95,7 @@ fun ThirdQuizEndingScreen(
                                 currentStep = quizScreenState.currentStep,
                                 currentProgress = quizScreenState.progressPercentage
                             ))
-                            questionEvent(QuestionEvent.UpdateStage(QuizStage.LAST_QUIZ_ENDING_SCREEN))
+                            questionEvent(QuestionEvent.UpdateStage(QuizStage.SECOND_QUIZ_ENDING_SCREEN))
                         },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -140,5 +116,5 @@ fun ThirdQuizEndingScreen(
 @Composable
 @Preview
 fun PreviewThirdQuizEndingScreen(){
-//    ThirdQuizEndingScreen()
+    ThirdQuizEndingScreen(quizScreenState = QuizScreenState() , {} , {})
 }

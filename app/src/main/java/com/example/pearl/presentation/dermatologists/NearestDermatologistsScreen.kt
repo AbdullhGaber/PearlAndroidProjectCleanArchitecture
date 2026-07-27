@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.R
+import com.example.pearl.domain.model.doctors
 import com.example.pearl.presentation.common.SearchBar
 import com.example.pearl.presentation.common.DermatologistCard
 import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
@@ -147,9 +148,9 @@ fun NearestDermatologistsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ){
-                            items(nearestDermatologistsCardData.size){
+                            items(doctors.size){
                                 DermatologistCard(
-                                    dermatologistCardData = (nearestDermatologistsCardData[it]),
+                                    dermatologistCardData = (doctors[it]),
                                     modifier = Modifier.padding(5.dp),
                                     onFavoriteClick = {
                                         doctorEvents(DoctorEvents.AddRemoveFavoriteDoctor(it))

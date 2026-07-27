@@ -60,4 +60,15 @@ class PearlTypeConverter {
     fun fromList(ingredients: List<String>): String {
         return Gson().toJson(ingredients)
     }
+
+    @TypeConverter
+    fun fromAppointmentTime(value: String): List<List<String>> {
+        val listType = object : TypeToken<List<List<String>>>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun toAppointmentTime(list: List<List<String>>): String {
+        return Gson().toJson(list)
+    }
 }

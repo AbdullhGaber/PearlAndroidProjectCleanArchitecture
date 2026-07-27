@@ -7,6 +7,13 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace 'com.example.pearl'
     compileSdk 34
@@ -22,6 +29,14 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        // Twilio secrets from local.properties
+        buildConfigField "String", "TWILIO_BASE_URL", "\"${localProperties['TWILIO_BASE_URL'] ?: ''}\""
+        buildConfigField "String", "TWILIO_SERVICE_SID", "\"${localProperties['TWILIO_SERVICE_SID'] ?: ''}\""
+        buildConfigField "String", "TWILIO_ACCOUNT_SID", "\"${localProperties['TWILIO_ACCOUNT_SID'] ?: ''}\""
+        buildConfigField "String", "TWILIO_AUTH_TOKEN", "\"${localProperties['TWILIO_AUTH_TOKEN'] ?: ''}\""
+        buildConfigField "String", "TEST_TWILIO_ACCOUNT_SID", "\"${localProperties['TEST_TWILIO_ACCOUNT_SID'] ?: ''}\""
+        buildConfigField "String", "TEST_TWILIO_AUTH_TOKEN", "\"${localProperties['TEST_TWILIO_AUTH_TOKEN'] ?: ''}\""
     }
 
     buildTypes {
@@ -39,6 +54,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.2.0'

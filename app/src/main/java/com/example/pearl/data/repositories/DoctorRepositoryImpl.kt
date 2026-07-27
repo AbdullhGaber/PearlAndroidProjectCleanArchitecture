@@ -1,11 +1,15 @@
 package com.example.pearl.data.repositories
 
+import android.util.Log
 import com.example.pearl.data.local.dao.DoctorDao
 import com.example.pearl.domain.model.Doctor
 import com.example.pearl.domain.repositories.DoctorRepository
+import com.example.pearl.util.Constants
+import com.google.firebase.database.FirebaseDatabase
 
 class DoctorRepositoryImpl(
-    val mDoctorDao : DoctorDao
+    val mDoctorDao : DoctorDao,
+    val mDatabase: FirebaseDatabase
 ) : DoctorRepository {
     override suspend fun addDoctorToFavorite(doctor: Doctor ,onFailure: (Throwable) -> Unit) {
         try{
@@ -34,6 +38,21 @@ class DoctorRepositoryImpl(
         }catch (ex : Exception){
             onFailure(ex)
             emptyList()
+        }
+    }
+
+    override suspend fun getDoctor(
+        doctorUid : String,
+        onSuccess: (Doctor) -> Unit,
+        onFailure: (Throwable) -> Unit,
+    ){
+        val doctorRef = mDatabase.getReference(Constants.DOCTOR_REFERENCE).child(doctorUid)
+
+        doctorRef.get().addOnCompleteListener {
+            val doctor = it.result.getValue(Doctor::class.java)
+            onSuccess(doctor!!)
+        }.addOnFailureListener{
+            onFailure(it)
         }
     }
 }

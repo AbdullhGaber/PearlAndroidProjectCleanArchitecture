@@ -70,7 +70,7 @@ fun ReviewSummaryScreen(
                     .background(Color(0xFFFAF8FF))
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.doctor_1),
+                        painter = painterResource(id = R.drawable.doctor_3),
                         contentDescription = null,
                         modifier = Modifier
                             .size(90.dp, 110.dp)
@@ -83,7 +83,7 @@ fun ReviewSummaryScreen(
 
                 Column{
                     Text(
-                        text = "Dr. Mariam Zahran",
+                        text = "Dr. Abdullh Gaber",
                         fontSize = 18.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFF000000),

@@ -41,7 +41,7 @@ fun DoctorCard(
             modifier = Modifier.padding(ExtraSmallPadding2),
         ) {
             Image(
-                painter = painterResource(id = doctor.image),
+                painter = painterResource(id = doctor.imageInt),
                 contentDescription = null,
                 modifier = Modifier
                     .align(CenterHorizontally)

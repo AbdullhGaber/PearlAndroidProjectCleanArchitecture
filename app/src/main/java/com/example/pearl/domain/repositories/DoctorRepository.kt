@@ -12,4 +12,10 @@ interface DoctorRepository {
         onSuccess : (List<Doctor>) -> Unit,
         onFailure : (Throwable) -> Unit
     ) : List<Doctor>
+
+    suspend fun getDoctor(
+        doctorUid : String,
+        onSuccess: (Doctor) -> Unit,
+        onFailure: (Throwable) -> Unit
+    )
 }

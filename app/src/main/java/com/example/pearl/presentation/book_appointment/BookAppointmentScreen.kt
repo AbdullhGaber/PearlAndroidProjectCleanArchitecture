@@ -26,6 +26,8 @@ import com.example.pearl.presentation.common.PrimaryButton
 
 @Composable
 fun BookAppointmentScreen(
+    bookAppointmentState: BookAppointmentState,
+    bookAppointmentEvents: (BookAppointmentEvents) -> Unit,
     navigateToScreen : () -> Unit,
     navigateToPrevious : () -> Unit
 ){
@@ -84,7 +86,7 @@ fun BookAppointmentScreen(
                     .background(Color(0xFFFAF8FF))
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.doctor_1),
+                        painter = painterResource(id = R.drawable.doctor_3),
                         contentDescription = null,
                         modifier = Modifier
                             .size(90.dp, 110.dp)
@@ -97,7 +99,7 @@ fun BookAppointmentScreen(
 
                 Column{
                     Text(
-                        text = "Dr. Mariam Zahran",
+                        text = bookAppointmentState.doctor.name,
                         fontSize = 18.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFF000000),
@@ -113,7 +115,7 @@ fun BookAppointmentScreen(
                         Spacer(modifier = Modifier.width(3.dp))
 
                         Text(
-                            text = "El Mansoura, El Gaish St",
+                            text = bookAppointmentState.doctor.location,
                             fontSize = 12.sp,
                             fontWeight = FontWeight(400),
                             color = Color(0xFF7F7F7F),
@@ -175,7 +177,7 @@ fun BookAppointmentScreen(
 
                 Column(verticalArrangement = Arrangement.Center) {
                     Text(
-                        text = "150 LE",
+                        text = "${bookAppointmentState.doctor.onlineAppointmentPrice} LE",
                         fontSize = 16.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFF000000),
@@ -232,7 +234,7 @@ fun BookAppointmentScreen(
 
                 Column(verticalArrangement = Arrangement.Center) {
                     Text(
-                        text = "200 LE",
+                        text =  "${bookAppointmentState.doctor.inPersonAppointmentPrice} LE",
                         fontSize = 16.sp,
                         fontWeight = FontWeight(500),
                         color = Color(0xFF000000),
@@ -256,7 +258,7 @@ fun BookAppointmentScreen(
             Spacer(modifier = Modifier.height(22.dp))
 
             Text(
-                text = "Day",
+                text = "Appointment Time",
                 fontSize = 16.sp,
                 fontWeight = FontWeight(500),
                 color = Color(0xFF000000),
@@ -268,113 +270,46 @@ fun BookAppointmentScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),Arrangement.SpaceBetween
             ){
-                Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(
-                        text = "Today",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF7F7F7F)
-                    )
+                bookAppointmentState.doctor.appointmentTime.forEach {
+                    Column(verticalArrangement = Arrangement.Center , horizontalAlignment = CenterHorizontally){
+                        Text(
+                            text = it[0],
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF7F7F7F)
+                        )
 
-                    Spacer(modifier = Modifier.height(1.dp))
-
-                    Text(
-                        text = "20 OCT",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF000000),
-                    )
-                }
-
-                Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(
-                        text = "Thu",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF7F7F7F)
-                    )
-
-                    Text(
-                        text = "22 OCT",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF000000),
-                    )
-                }
-
-                Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(
-                        text = "Sat",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF7F7F7F)
-                    )
-
-                    Text(
-                        text = "24 OCT",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF000000),
-                    )
+                        Text(
+                            text = it[1],
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF000000)
+                        )
+                    }
                 }
             }
-
             Spacer(modifier = Modifier.height(28.dp))
-
-            Text(
-                text = "Time",
-                fontSize = 16.sp,
-                fontWeight = FontWeight(500),
-                color = Color(0xFF000000),
-            )
-
-            Spacer(modifier = Modifier.height(25.dp))
-
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),Arrangement.SpaceBetween
-            ){
-                Text(
-                    text = "1:00 pm",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF000000)
-                )
-
-                Text(
-                    text = "1:30 pm",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF000000),
-                )
-
-                Text(
-                     text = "2:00 pm",
-                     fontSize = 14.sp,
-                     fontWeight = FontWeight.SemiBold,
-                     color = Color(0xFF000000),
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(51.dp))
-            
-            PrimaryButton(
-                text = "Next",
-                onClick = {
-                    navigateToScreen()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(CenterHorizontally)
-            )
-
         }
+        PrimaryButton(
+            text = "Next",
+            onClick = {
+                navigateToScreen()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(10.dp)
+        )
     }
 }
 
 @Composable
 @Preview
 fun PreviewBookAppointmentScreen(){
-    BookAppointmentScreen({},{})
+    BookAppointmentScreen(
+        bookAppointmentEvents = {},
+        bookAppointmentState = BookAppointmentState(),
+        navigateToPrevious = {},
+        navigateToScreen = {}
+    )
 }

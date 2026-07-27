@@ -2,6 +2,7 @@ package com.example.pearl.presentation.pearl_navigator
 
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ModalDrawerSheet
@@ -56,8 +57,11 @@ import com.example.pearl.presentation.common.getProductTypeFromString
 import com.example.pearl.presentation.dermatologists.DermatologistDetailsScreen
 import com.example.pearl.presentation.dermatologists.NearestDermatologistsScreen
 import com.example.pearl.domain.model.doctors
+import com.example.pearl.presentation.book_appointment.BookAppointmentEvents
+import com.example.pearl.presentation.book_appointment.BookAppointmentViewModel
 import com.example.pearl.presentation.dermatologists.DermatologistViewModel
 import com.example.pearl.presentation.favorites.FavoritesViewModel
+import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.home.sideMenuItems
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.nav_graph.bottomNavRoutes
@@ -332,7 +336,7 @@ fun PearlNavigator(
                 composable(route = Route.ProductDetailsScreen.route+"/{productName}"){
                     val productViewModel : ProductViewModel = hiltViewModel()
                     val productName = it.arguments?.getString("productName")
-                    val product = (featuredProducts.single { product -> product.name == productName })
+                    val product = (recommendedProducts.single { product -> product.name == productName })
                     ProductDetailsScreen(
                         productEvent = productViewModel::onEvent,
                         productsState = productViewModel.productScreenState.value,
@@ -400,7 +404,8 @@ fun PearlNavigator(
                             pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(pearlNavController))
                         },
                         navigateToScreen = {
-                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.PaymentNavigation.route , pearlNavController))
+                            Log.e("Nav" , "navigate to book appointment with uid : ${doctor.uid}")
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(Route.BookAppointmentScreen.route+"/${doctor.uid}" , pearlNavController))
                         }
                     )
                 }
@@ -484,18 +489,24 @@ fun PearlNavigator(
                     )
                 }
 
-                navigation(startDestination = Route.BookAppointmentScreen.route , route = Route.PaymentNavigation.route){
-                    composable(route = Route.BookAppointmentScreen.route){
-                        BookAppointmentScreen(
-                            navigateToScreen = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = Route.PaymentMethodScreen.route))
-                            },
+                composable(route = Route.BookAppointmentScreen.route+"/{uid}"){
+                    val uid = it.arguments?.getString("uid" , "")
+                    val bookAppointmentViewModel : BookAppointmentViewModel = hiltViewModel()
+                    bookAppointmentViewModel.bookAppointmentState.value = bookAppointmentViewModel.bookAppointmentState.value.copy(doctor = bookAppointmentViewModel.bookAppointmentState.value.doctor.copy(uid = uid?: "URfZ2Dz6cebkr36b1qh4ruYfU4n1"))
+                    bookAppointmentViewModel.onEvent(BookAppointmentEvents.GetDoctorDetails(bookAppointmentViewModel.bookAppointmentState.value.doctor.uid))
+                    BookAppointmentScreen(
+                        bookAppointmentState = bookAppointmentViewModel.bookAppointmentState.value,
+                        bookAppointmentEvents = bookAppointmentViewModel::onEvent,
+                        navigateToScreen = {
+                            pearlNavEvent(PearlNavigatorEvents.NavigateTo(navController = pearlNavController , route = Route.PaymentMethodScreen.route))
+                        },
+                        navigateToPrevious = {
+                            pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
+                        }
+                    )
+                }
 
-                            navigateToPrevious = {
-                                pearlNavEvent(PearlNavigatorEvents.NavigateToPrevious(navController = pearlNavController))
-                            }
-                        )
-                    }
+                navigation(startDestination = Route.BookAppointmentScreen.route , route = Route.PaymentNavigation.route){
 
                     composable(route = Route.PaymentMethodScreen.route){
                         PaymentMethodScreen(

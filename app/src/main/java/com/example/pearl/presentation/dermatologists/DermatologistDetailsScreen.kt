@@ -93,7 +93,7 @@ fun DermatologistDetailsScreen(
                     .background(Color(0xFFFAF8FF))
                 ){
                     Image(
-                        painter = painterResource(id = doctor.image),
+                        painter = painterResource(id = doctor.imageInt),
                         contentDescription = null,
                         modifier = Modifier
                             .size(90.dp, 110.dp)

@@ -203,5 +203,5 @@ fun MyAppointmentsScreen(
 @Composable
 @Preview
 fun PreviewMyAppointmentsScreen(){
-//    MyAppointmentsScreen()
+    MyAppointmentsScreen({})
 }

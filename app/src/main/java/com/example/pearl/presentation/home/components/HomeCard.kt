@@ -183,7 +183,7 @@ fun HomeCard(
                    HomeProductsCard(
                        recommendedProduct = recommendedProducts[it] ,
                        onCardClick = {
-                           navigateToScreen("${Route.ProductDetailsScreen.route}/${featuredProducts[it].name}")
+                           navigateToScreen("${Route.ProductDetailsScreen.route}/${recommendedProducts[it].name}")
                        }
                    )
                }

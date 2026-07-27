@@ -64,7 +64,7 @@ fun RoutineScreen(
             for (routineBox in routineBoxes){
                 RoutineBox(routineBoxData = routineBox , onClick = {
                     if(routineBox.routineTime != null){
-                        routineEvents(RoutineEvents.SelectRoutineTime(it))
+                        routineEvents(RoutineEvents.SelectRoutineTime(routineBox.routineTime))
                         navigateToScreen(Route.RoutineDetailsScreen.route)
                     }else{
                         navigateToScreen(Route.NutritionRoutineScreen.route)

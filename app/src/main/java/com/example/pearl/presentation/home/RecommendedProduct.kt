@@ -39,7 +39,7 @@ val recommendedProducts = listOf(
     Product(
         id = 5,
         image = R.drawable.vitamine_c,
-        name = "Dr.Rashel Vitamin C Face Serum",
+        name = "Dr.Rashel Vitamin C Face Serum 2",
         productType = ProductType.createSerum()
     ),
 
@@ -62,6 +62,14 @@ val recommendedProducts = listOf(
         image = R.drawable.care_and_more,
         name = "Care & More Soft cream with glycerin",
         productType = ProductType.createMoisturizer()
+    ),
+
+    Product(
+        id = 8,
+        image = R.drawable.ciel_cleanser,
+        name = "CIEL",
+        productType = ProductType.createCleanser(),
+        description = "Vitamin C Face Serum",
     ),
 )
 

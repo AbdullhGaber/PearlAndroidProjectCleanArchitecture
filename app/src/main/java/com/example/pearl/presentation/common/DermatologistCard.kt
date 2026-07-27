@@ -22,6 +22,7 @@ import com.example.pearl.R
 import com.example.pearl.presentation.book_appointment.components.DoctorAppointmentButton
 import com.example.pearl.presentation.dermatologists.nearestDermatologistsCardData
 import com.example.pearl.domain.model.Doctor
+import com.example.pearl.domain.model.doctors
 
 @Composable
 fun DermatologistCard(
@@ -41,7 +42,7 @@ fun DermatologistCard(
             .padding(10.dp)
             .wrapContentSize()) {
           Image(
-              painter = painterResource(id = dermatologistCardData.image),
+              painter = painterResource(id = dermatologistCardData.imageInt),
               contentDescription = null,
               modifier = Modifier.size(88.dp,92.dp),
           )

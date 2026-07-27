@@ -25,14 +25,16 @@ import com.example.pearl.presentation.routines.RoutineTime
 @Composable
 fun RoutineBox(
     routineBoxData: RoutineBoxData,
-    onClick : (RoutineTime) -> Unit
+    onClick : () -> Unit
 ){
    Box(
        modifier = Modifier
            .padding(10.dp)
            .clip(RoundedCornerShape(10.dp))
            .background(routineBoxData.backgroundColor)
-           .clickable { onClick(routineBoxData.routineTime!!) },
+           .clickable {
+               onClick()
+           },
    ){
        Row(Modifier
            .padding(horizontal = 10.dp, vertical = 20.dp)

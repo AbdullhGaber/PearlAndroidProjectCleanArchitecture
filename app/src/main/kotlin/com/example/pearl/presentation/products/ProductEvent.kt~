@@ -1,0 +1,4 @@
+package com.example.pearl.presentation.products
+
+class ProductScreenState {
+}

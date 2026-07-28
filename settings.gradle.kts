@@ -26,7 +26,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Pearl"
 include(":app")
-// include(":design_system")
+include(":design_system")
 // include(":domain")
 // include(":data")
 // include(":presentation")

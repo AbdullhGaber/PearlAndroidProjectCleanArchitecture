@@ -25,9 +25,9 @@ import androidx.navigation.NavController
 import com.example.pearl.design_system.theme.Dimens.ExtraSmallPadding
 import com.example.pearl.design_system.theme.Dimens.ExtraSmallPadding2
 import com.example.pearl.design_system.theme.Dimens.MediumPadding1
-import com.example.pearl.design_system.components.FeaturedProductCard
+import com.example.pearl.presentation.common.FeaturedProductCard
 import com.example.pearl.design_system.components.HomeButton
-import com.example.pearl.design_system.components.RecommendedProductCard
+import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.design_system.components.SearchBar
 import com.example.pearl.presentation.nav_graph.Route

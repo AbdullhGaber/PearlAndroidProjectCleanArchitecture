@@ -16,7 +16,7 @@ import com.example.pearl.design_system.theme.Dimens.ExtraSmallPadding2
 import com.example.pearl.design_system.theme.Dimens.MediumPadding1
 import com.example.pearl.design_system.theme.Dimens.MediumPadding2
 import com.example.pearl.R
-import com.example.pearl.design_system.components.SkinCalenderView
+import com.example.pearl.presentation.common.SkinCalenderView
 
 @Composable
 fun HomeTopSection(

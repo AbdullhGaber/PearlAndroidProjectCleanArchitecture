@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.R
 import com.example.pearl.domain.model.doctors
 import com.example.pearl.design_system.components.SearchBar
-import com.example.pearl.design_system.components.DermatologistCard
+import com.example.pearl.presentation.common.DermatologistCard
 import com.example.pearl.presentation.dermatologists.components.DermatologistScheduleCard
 
 @OptIn(ExperimentalFoundationApi::class)

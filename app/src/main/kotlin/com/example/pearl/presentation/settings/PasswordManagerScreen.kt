@@ -20,8 +20,8 @@ import com.example.pearl.R
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.authentication.components.EmailTextField
-import com.example.pearl.design_system.components.NewPasswordTextField
-import com.example.pearl.design_system.components.PasswordTextField
+import com.example.pearl.presentation.common.NewPasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.design_system.components.PrimaryButton
 import com.example.pearl.presentation.util.ErrorDialog
 import com.example.pearl.presentation.util.PrimaryDialog

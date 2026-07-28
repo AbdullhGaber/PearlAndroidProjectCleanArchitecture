@@ -25,7 +25,7 @@ import com.example.pearl.design_system.theme.Dimens.ExtraSmallPadding2
 import com.example.pearl.design_system.theme.Dimens.MediumPadding1
 import com.example.pearl.R
 import com.example.pearl.design_system.components.HomeButton
-import com.example.pearl.design_system.components.RecommendedProductCard
+import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.HomeScreenEvents
 import com.example.pearl.presentation.home.HomeScreenState
 import com.example.pearl.domain.model.doctors

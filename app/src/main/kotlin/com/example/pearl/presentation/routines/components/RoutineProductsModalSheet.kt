@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.design_system.theme.Dimens
 import com.example.pearl.design_system.theme.Dimens.MediumPadding1
 import com.example.pearl.domain.model.Product
-import com.example.pearl.design_system.components.FeaturedProductCard
-import com.example.pearl.design_system.components.RecommendedProductCard
+import com.example.pearl.presentation.common.FeaturedProductCard
+import com.example.pearl.presentation.common.RecommendedProductCard
 import com.example.pearl.presentation.home.recommendedProducts
 import com.example.pearl.presentation.products.ProductType
 import com.example.pearl.presentation.products.featuredProducts

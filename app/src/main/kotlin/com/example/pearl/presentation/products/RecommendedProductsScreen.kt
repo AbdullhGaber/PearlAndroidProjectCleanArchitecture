@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.design_system.theme.Dimens
 import com.example.pearl.design_system.theme.Dimens.ExtraSmallPadding2
 import com.example.pearl.design_system.theme.Dimens.MediumPadding1
-import com.example.pearl.design_system.components.FeaturedProductCard
+import com.example.pearl.presentation.common.FeaturedProductCard
 import com.example.pearl.design_system.components.HomeButton
 import com.example.pearl.design_system.components.SearchBar
 

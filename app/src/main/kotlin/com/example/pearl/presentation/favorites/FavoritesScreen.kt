@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pearl.design_system.theme.Dimens
 import com.example.pearl.R
-import com.example.pearl.design_system.components.FeaturedProductCard
-import com.example.pearl.design_system.components.DermatologistCard
+import com.example.pearl.presentation.common.FeaturedProductCard
+import com.example.pearl.presentation.common.DermatologistCard
 import com.example.pearl.presentation.util.ErrorDialog
 
 

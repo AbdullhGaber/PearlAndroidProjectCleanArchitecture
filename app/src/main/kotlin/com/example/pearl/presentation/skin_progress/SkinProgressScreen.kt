@@ -23,7 +23,7 @@ import com.example.pearl.design_system.theme.Dimens.MediumPadding1
 import com.example.pearl.design_system.theme.Dimens.MediumPadding2
 import com.example.pearl.R
 import com.example.pearl.design_system.components.BigCircleButton
-import com.example.pearl.design_system.components.SkinCalenderView
+import com.example.pearl.presentation.common.SkinCalenderView
 import com.example.pearl.presentation.nav_graph.navigateToPreviousTab
 import com.example.pearl.presentation.pearl_navigator.PearlNavEventFunction
 import com.example.pearl.presentation.pearl_navigator.PearlNavState

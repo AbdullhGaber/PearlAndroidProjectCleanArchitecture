@@ -28,7 +28,7 @@ import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.design_system.components.PrimaryButton
 import com.example.pearl.presentation.authentication.components.EmailTextField
-import com.example.pearl.design_system.components.PasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.design_system.components.SocialMediaButton
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.presentation.sign_in.components.CenteredTextBetweenTwoLines

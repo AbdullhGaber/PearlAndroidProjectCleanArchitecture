@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pearl.presentation.authentication.AuthEvent
 import com.example.pearl.presentation.authentication.AuthState
 import com.example.pearl.presentation.authentication.components.EmailTextField
-import com.example.pearl.design_system.components.PasswordTextField
+import com.example.pearl.presentation.common.PasswordTextField
 import com.example.pearl.design_system.components.PrimaryButton
 
 

@@ -52,9 +52,9 @@ import com.example.pearl.domain.usecases.routine.AddRoutineUseCase
 import com.example.pearl.domain.usecases.routine.GetRoutinesUseCase
 import com.example.pearl.domain.usecases.routine.RemoveRoutineUseCase
 import com.example.pearl.domain.usecases.routine.RoutineUseCases
-import com.example.pearl.util.Constants.TWILIO_ACCOUNT_SID
-import com.example.pearl.util.Constants.TWILIO_AUTH_TOKEN
-import com.example.pearl.util.Constants.TWILIO_BASE_URL
+import com.example.pearl.data.util.Constants.TWILIO_ACCOUNT_SID
+import com.example.pearl.data.util.Constants.TWILIO_AUTH_TOKEN
+import com.example.pearl.data.util.Constants.TWILIO_BASE_URL
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

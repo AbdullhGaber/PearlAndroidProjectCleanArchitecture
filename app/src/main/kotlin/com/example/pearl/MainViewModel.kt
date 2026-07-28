@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pearl.domain.usecases.app_entry.AppEntryUseCases
 import com.example.pearl.presentation.nav_graph.Route
-import com.example.pearl.util.Constants.USER_REFERENCE
+import com.example.pearl.data.util.Constants.USER_REFERENCE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

@@ -15,6 +15,8 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
+includeBuild("build-logic")
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -27,7 +29,7 @@ dependencyResolutionManagement {
 rootProject.name = "Pearl"
 include(":app")
 include(":design_system")
-// include(":domain")
-// include(":data")
-// include(":presentation")
-// include(":navigation")
+include(":domain")
+include(":data")
+include(":presentation")
+include(":navigation")

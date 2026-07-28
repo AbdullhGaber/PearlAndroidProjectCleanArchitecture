@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.core.app.ActivityCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pearl.presentation.nav_graph.NavGraph
+
+import com.example.pearl.navigation.NavGraph
 import com.example.pearl.presentation.nav_graph.Route
 import com.example.pearl.design_system.theme.PearlTheme
 import dagger.hilt.android.AndroidEntryPoint
